@@ -1,0 +1,125 @@
+Keywords,Date and Time,Source,Event ID,Task Category,Level,Opcode,User,Computer,Message
+Audit Success,9/14/2026 2:02:00 PM,Microsoft-Windows-Security-Auditing,4624,Logon,Information,Info,CORP\Administrator,WS-ADMIN01,"An account was successfully logged on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		WS-ADMIN01$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Information:
+	Logon Type:		2
+	Restricted Admin Mode:	-
+	Virtual Account:		No
+	Elevated Token:		Yes
+
+New Logon:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		Administrator
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+	Logon GUID:		{00000000-0000-0000-0000-000000000000}
+
+Process Information:
+	Process ID:		0x44c
+	Process Name:		C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	WS-ADMIN01
+	Source Network Address:	10.20.30.10
+	Source Port:		51544
+
+This event is generated when a logon session is created."
+Audit Success,9/14/2026 2:03:11 PM,Microsoft-Windows-Security-Auditing,4720,User Account Management,Information,Info,CORP\Administrator,WS-ADMIN01,"A user account was created.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		Administrator
+	Account Domain:		CORP
+	Logon ID:		0x2F1A4
+
+New Account:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1105
+	Account Name:		temp-admin
+	Account Domain:		CORP
+
+Attributes:
+	SAM Account Name:	temp-admin
+	Display Name:		temp-admin
+	User Principal Name:	temp-admin@example.invalid
+	Password Last Set:	14/09/2026 09:41:02
+	Account Expires:		Never"
+Audit Success,9/14/2026 2:07:44 PM,Microsoft-Windows-Security-Auditing,4732,Security Group Management,Information,Info,CORP\Administrator,WS-ADMIN01,"A member was added to a security-enabled security group.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		Administrator
+	Account Domain:		CORP
+	Logon ID:		0x2F1A4
+
+Member:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1105
+	Account Name:		temp-admin
+	Account Domain:		CORP
+
+Group:
+	Security ID:		S-1-5-32-544
+	Group Name:		Administrators
+	Group Domain:		BUILTIN"
+Audit Success,9/14/2026 2:08:02 PM,Microsoft-Windows-Security-Auditing,4672,Special Logon,Information,Info,CORP\temp-admin,WS-ADMIN01,"Special privileges assigned to new logon.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		temp-admin
+	Account Domain:		CORP
+	Logon ID:		0x2F1A4
+
+Privileges:		SeSecurityPrivilege
+			SeBackupPrivilege
+			SeRestorePrivilege
+			SeTakeOwnershipPrivilege"
+Audit Success,9/14/2026 2:08:15 PM,Microsoft-Windows-Security-Auditing,4688,Process Creation,Information,Info,CORP\temp-admin,WS-ADMIN01,"A new process has been created.
+
+Creator Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		temp-admin
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+
+Process Information:
+	New Process ID:		0x1a2b
+	New Process Name:	C:\Windows\System32\cmd.exe
+	Creator Process ID:	0x9c4
+	Creator Process Name:	C:\Windows\System32\cmd.exe
+	Process Command Line:	cmd.exe"
+Audit Success,9/14/2026 2:20:00 PM,Microsoft-Windows-Security-Auditing,4624,Logon,Information,Info,CORP\temp-admin,WS-ADMIN01,"An account was successfully logged on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		WS-ADMIN01$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Information:
+	Logon Type:		2
+	Restricted Admin Mode:	-
+	Virtual Account:		No
+	Elevated Token:		Yes
+
+New Logon:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		temp-admin
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+	Logon GUID:		{00000000-0000-0000-0000-000000000000}
+
+Process Information:
+	Process ID:		0x44c
+	Process Name:		C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	WS-ADMIN01
+	Source Network Address:	10.20.30.10
+	Source Port:		51544
+
+This event is generated when a logon session is created."

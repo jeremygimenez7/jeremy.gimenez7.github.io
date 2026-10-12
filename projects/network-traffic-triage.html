@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  PROJECT CASE STUDY - Network Traffic Triage Tool
+  projects/network-traffic-triage.html
+  ----------------------------------------------------------------------------
+  Detailed write-up of the Wireshark CSV triage tool.
+  The working application itself lives in projects/network-traffic-triage/.
+  NOTE: this file lives in the /projects/ folder, so links to shared files start
+  with "../" (e.g. ../css/styles.css).
+  ============================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Network Traffic Triage Tool | Jeremy Gimenez</title>
+  <meta name="description" content="An educational, dependency-free tool that turns a Wireshark packet-list CSV into an explainable network activity report using six transparent threshold rules and no AI.">
+  <meta name="author" content="Jeremy Gimenez">
+  <meta name="theme-color" content="#0a0e13">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Network Traffic Triage Tool | Jeremy Gimenez">
+  <meta property="og:description" content="Wireshark CSV in, explainable network triage report out. Six transparent threshold rules, adjustable settings, and analysis that never leaves the browser.">
+  <meta property="og:image" content="../assets/favicon.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="../index.html">
+        <span class="mark" aria-hidden="true">JG</span>
+        <span class="who">
+          <span>Jeremy Gimenez</span>
+          <small>Cybersecurity Portfolio</small>
+        </span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links" id="primary-nav">
+          <li><a href="../index.html#about">About</a></li>
+          <li><a href="../index.html#projects">Projects</a></li>
+          <li><a href="../index.html#skills">Skills</a></li>
+          <li><a href="../index.html#certifications">Certifications</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap breadcrumb">
+      <a href="../index.html">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="../index.html#projects">Projects</a>
+      <span aria-hidden="true">/</span>
+      <span>Network Traffic Triage Tool</span>
+    </div>
+
+    <section class="project-hero">
+      <div class="wrap">
+        <span class="badge badge-domain">Education &amp; tooling · Network Traffic Analysis</span>
+        <h1>Network Traffic Triage Tool - Wireshark CSV Analysis</h1>
+        <p class="lede">
+          A static browser application that turns a Wireshark packet-list CSV export into a
+          readable network activity report. Six transparent threshold rules flag activity
+          worth investigating, explain their own reasoning, and leave the judgement to the
+          analyst. No AI, no machine learning and no packet data leaving the browser.
+        </p>
+        <div class="badges" aria-label="Technologies used">
+          <span class="badge">HTML</span>
+          <span class="badge">CSS</span>
+          <span class="badge">Vanilla JavaScript</span>
+          <span class="badge">CSV parser written from scratch</span>
+          <span class="badge badge-accent">Local-only analysis</span>
+        </div>
+
+        <div class="card-actions" style="margin-top:1.4rem;">
+          <a class="btn btn-primary" href="network-traffic-triage/index.html">Open the live tool</a>
+          <a class="btn btn-ghost" href="#rules">See the rules</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         01. OVERVIEW
+         ====================================================================== -->
+    <section id="overview">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">01 · Overview</span>
+          <h2>Project overview</h2>
+        </div>
+
+        <div class="callout">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>Detection tells an analyst where to look. Investigation determines what actually happened.</strong> An anomaly is a starting point for investigation, not proof of compromise. No alerts does not mean a capture is safe.</p>
+        </div>
+
+        <div class="prose">
+          <p>
+            Wireshark is excellent at showing you packets and poor at telling you what to pay
+            attention to. This project fills that gap for learning purposes: export the packet
+            list as CSV, load it, and get counts, the busiest endpoints, a protocol breakdown
+            and a small set of clearly-explained alerts.
+          </p>
+          <p>
+            It deliberately avoids the "AI detects hackers" style of tool. There is no
+            probability of compromise, no risk score presented as certainty, and no claim that
+            any single pattern proves anything. The rules use simple, inspectable counts, and
+            the thresholds are adjustable so you can see how a configuration choice changes the
+            result without changing the underlying evidence.
+          </p>
+
+          <h3>Objectives</h3>
+          <ul class="plan-list">
+            <li>Practise the analyst workflow: observe, identify, classify, corroborate, decide.</li>
+            <li>Make every alert explain itself, including the innocent explanation that could account for it.</li>
+            <li>Write a CSV parser from scratch, including quoted commas, escaped quotes and multiline fields.</li>
+            <li>Keep the whole thing dependency-free and genuinely offline.</li>
+            <li>Test the parser and the rule boundaries, not just the happy path.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         02. THE RULES
+         ====================================================================== -->
+    <section id="rules">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">02 · Detection rules</span>
+          <h2>Six threshold rules, all adjustable</h2>
+          <p>Every rule triggers on <strong>more than</strong>, not equal to, its threshold. Counts cover the entire imported export, not a time window.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>High Packet Volume</h3>
+            <p class="meta-line">Default: &gt; 50 packets per source · Priority: Low</p>
+            <p>Counts packets sent by a single source address. A busy server, a backup job or a software update can legitimately produce the same figure.</p>
+          </div>
+          <div class="card">
+            <h3>Possible Network Scanning</h3>
+            <p class="meta-line">Default: &gt; 10 distinct destinations · Priority: Medium</p>
+            <p>Counts distinct numeric destination addresses contacted by one source. Authorised vulnerability scans and monitoring probes look similar.</p>
+          </div>
+          <div class="card">
+            <h3>Possible Port Scanning</h3>
+            <p class="meta-line">Default: &gt; 10 distinct ports · Priority: Medium</p>
+            <p>Counts distinct inferred destination ports per source/destination pair. Ports are only read from TCP/UDP rows with a numeric port pair in the Info field.</p>
+          </div>
+          <div class="card">
+            <h3>High ICMP Activity</h3>
+            <p class="meta-line">Default: &gt; 30 ICMP packets · Priority: Medium</p>
+            <p>Counts ICMP and ICMPv6 packets per source. Ping sweeps and network troubleshooting both produce this pattern.</p>
+          </div>
+          <div class="card">
+            <h3>High DNS Activity</h3>
+            <p class="meta-line">Default: &gt; 30 DNS packets · Priority: Low</p>
+            <p>Counts DNS-labelled packets per source. It includes replies, so it does not prove high query volume, domain abuse or beaconing.</p>
+          </div>
+          <div class="card">
+            <h3>Repeated Communication</h3>
+            <p class="meta-line">Default: &gt; 40 packets per pair · Priority: Low</p>
+            <p>Counts packets for a directional source-to-destination pair and reports the most common protocol. Repeated traffic does not establish periodicity.</p>
+          </div>
+        </div>
+
+        <div class="callout warn" style="margin-top:1.5rem;">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg>
+          <p><strong>These are educational defaults, not universal security thresholds.</strong> A busy server may legitimately generate thousands of packets while the same activity from another endpoint deserves investigation. Capture duration, host role, normal workload and expected applications all matter.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         03. WORKFLOW
+         ====================================================================== -->
+    <section id="workflow">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">03 · Workflow</span>
+          <h2>From Wireshark to a triage report</h2>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="phase">
+            <span class="phase-num">1</span>
+            <h3>Capture</h3>
+            <ul>
+              <li>Open Wireshark and capture only traffic you own or are authorised to monitor.</li>
+              <li>Stop the capture when you have enough data.</li>
+              <li>Keep real captures out of synced folders if their contents are sensitive.</li>
+            </ul>
+          </div>
+          <div class="phase">
+            <span class="phase-num">2</span>
+            <h3>Export as CSV</h3>
+            <ul>
+              <li>Use the packet-dissections / packet-list CSV export and keep the column headings.</li>
+              <li>Check whether you are exporting all packets or only the displayed ones.</li>
+              <li>Export the CSV, not a PCAP - this tool does not parse captures.</li>
+            </ul>
+          </div>
+          <div class="phase">
+            <span class="phase-num">3</span>
+            <h3>Load it</h3>
+            <ul>
+              <li>Choose the file or drag it onto the page.</li>
+              <li>UTF-8 CSV only, up to 10 MiB / 50,000 packet rows.</li>
+              <li>Malformed input produces a clear error rather than a partial report.</li>
+            </ul>
+          </div>
+          <div class="phase">
+            <span class="phase-num">4</span>
+            <h3>Triage</h3>
+            <ul>
+              <li>Read the overview: totals, busiest endpoints, protocol distribution.</li>
+              <li>Check the analysis-coverage list, which states what could not be calculated.</li>
+              <li>Adjust thresholds and re-apply to see how the verdict changes.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         04. PRIVACY AND SECURITY
+         ====================================================================== -->
+    <section id="privacy">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">04 · Privacy &amp; security</span>
+          <h2>Privacy and security design</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            A packet list can expose internal addresses, hostnames, usernames and services. The
+            tool is built so that none of it is transmitted, and so that the browser itself
+            enforces that rather than relying on a promise.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Enforced in the page itself</h3>
+            <ul class="check-list">
+              <li>The page carries a strict <code>Content-Security-Policy</code> header: <code>default-src 'none'</code>, <code>script-src 'self'</code>, <code>connect-src 'none'</code>.</li>
+              <li>That policy makes the browser refuse outbound requests from the page, so a network call could not succeed even if it were added by mistake.</li>
+              <li>The uploaded CSV stays in memory and is never sent anywhere.</li>
+              <li>No cookies, no analytics, no external fonts or images.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Safe handling of untrusted input</h3>
+            <ul class="check-list">
+              <li>Every value taken from the CSV is written into the page as text, never as HTML.</li>
+              <li>Injected markup in a CSV field renders as visible text instead of running.</li>
+              <li>The CSV parser handles quoted commas, escaped double quotes and multiline quoted fields.</li>
+              <li>Decisions that cannot be made safely produce a warning, not a guess.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout warn" style="margin-top:1.5rem;">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg>
+          <p><strong>Only analyse traffic from systems and networks you own or are authorised to monitor.</strong> Use the fictional sample captures for demonstrations rather than exposing real users, addresses or hostnames.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         05. SAMPLES, EXPLAINABILITY AND TESTING
+         ====================================================================== -->
+    <section id="testing">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">05 · Explainability &amp; testing</span>
+          <h2>Samples, explanations and tests</h2>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Three fictional captures</h3>
+            <ul class="check-list">
+              <li><strong>Normal traffic</strong> - 18 packets, no alerts. No alerts is not proof of safety.</li>
+              <li><strong>High-volume traffic</strong> - 60 packets, producing one High Packet Volume alert for 10.0.0.25.</li>
+              <li><strong>Mixed SOC lab</strong> - 176 packets, seven alerts covering all six rules.</li>
+            </ul>
+            <p class="meta-line" style="margin-top:0.9rem;">All three use documentation-only address ranges and invented hostnames.</p>
+          </div>
+
+          <div class="card">
+            <h3>Every alert explains itself</h3>
+            <ul class="check-list">
+              <li>Which rule fired, the threshold used and the count that exceeded it.</li>
+              <li>The specific packets or addresses that produced the count.</li>
+              <li>A suggested line of investigation.</li>
+              <li>The ordinary activity that could account for the same pattern.</li>
+            </ul>
+            <p class="meta-line" style="margin-top:0.9rem;">Priority represents where to investigate, not certainty or business impact.</p>
+          </div>
+        </div>
+
+        <div class="prose" style="margin-top:1.5rem;">
+          <p>
+            The parser and the rule engine are covered by a dependency-free browser test suite at
+            <code>tests/tests.html</code>. It covers parser edge cases, threshold boundaries, the
+            three sample captures and the safe rendering of alert text, and reports pass or fail
+            in the page. It needs no special browser flags and no installation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         06. LIMITATIONS
+         ====================================================================== -->
+    <section id="limitations">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">06 · Limitations</span>
+          <h2>What this tool cannot tell you</h2>
+          <p>A CSV export is not a packet capture, and this tool is honest about what that costs it.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Data limitations</h3>
+            <ul class="check-list">
+              <li>CSV lacks much of the information a PCAP contains.</li>
+              <li>Encrypted traffic limits payload visibility.</li>
+              <li>NAT, resolved names, IPv6 spellings and shared systems all complicate attribution.</li>
+              <li>Protocol labels are Wireshark's interpretation, not ground truth.</li>
+              <li>Semicolon-delimited and UTF-16 exports are not supported.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Analytical limitations</h3>
+            <ul class="check-list">
+              <li>Packet volume alone does not establish malicious behaviour.</li>
+              <li>No time-window analysis, baselining or retransmission de-duplication.</li>
+              <li>Repeated communication does not establish periodicity or beaconing.</li>
+              <li>No direction-of-session inference and no capture-integrity verification.</li>
+              <li>It does not replace Wireshark, an IDS, a SIEM or professional network monitoring.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         07. TRY IT
+         ====================================================================== -->
+    <section id="try-it">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">07 · Try it</span>
+          <h2>Open the tool</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            Start with the built-in sample captures. The mixed sample is the most useful for
+            learning, because it exercises all six rules at once and makes it obvious how much
+            context matters when deciding whether an alert is interesting.
+          </p>
+        </div>
+
+        <div class="card-actions">
+          <a class="btn btn-primary" href="network-traffic-triage/index.html">Open the live tool</a>
+          <a class="btn btn-ghost" href="network-traffic-triage/tests/tests.html">Run the test suite</a>
+          <a class="btn btn-ghost" href="../index.html#projects">All projects</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; <span id="year">2026</span> Jeremy Gimenez. Built as a static site with HTML, CSS and vanilla JavaScript.</p>
+      <nav aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">All projects</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

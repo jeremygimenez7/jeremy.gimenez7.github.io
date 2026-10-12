@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  PROJECT CASE STUDY - Phishing Email Analyser
+  projects/phishing-email-analyser.html
+  ----------------------------------------------------------------------------
+  Detailed write-up of the phishing email analyser project.
+  The working application itself lives in projects/phishing-email-analyser/.
+  NOTE: this file lives in the /projects/ folder, so links to shared files start
+  with "../" (e.g. ../css/styles.css).
+  ============================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Phishing Email Analyser | Jeremy Gimenez</title>
+  <meta name="description" content="A privacy-first phishing email triage tool: 49 explainable warning-sign checks, an open score from 0 to 100, optional SPF/DKIM/DMARC header analysis, and analysis that never leaves the browser.">
+  <meta name="author" content="Jeremy Gimenez">
+  <meta name="theme-color" content="#0a0e13">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Phishing Email Analyser | Jeremy Gimenez">
+  <meta property="og:description" content="An explainable phishing email triage tool that runs entirely in the browser: 49 checks, an open scoring model and optional email header authentication analysis.">
+  <meta property="og:image" content="../assets/favicon.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="../index.html">
+        <span class="mark" aria-hidden="true">JG</span>
+        <span class="who">
+          <span>Jeremy Gimenez</span>
+          <small>Cybersecurity Portfolio</small>
+        </span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links" id="primary-nav">
+          <li><a href="../index.html#about">About</a></li>
+          <li><a href="../index.html#projects">Projects</a></li>
+          <li><a href="../index.html#skills">Skills</a></li>
+          <li><a href="../index.html#certifications">Certifications</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap breadcrumb">
+      <a href="../index.html">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="../index.html#projects">Projects</a>
+      <span aria-hidden="true">/</span>
+      <span>Phishing Email Analyser</span>
+    </div>
+
+    <section class="project-hero">
+      <div class="wrap">
+        <span class="badge badge-domain">Education &amp; tooling · Phishing &amp; Social Engineering</span>
+        <h1>Phishing Email Analyser - Local, Explainable Email Triage</h1>
+        <p class="lede">
+          A static web application that reads a suspicious email and explains, in plain
+          English, which phishing and social-engineering warning signs it contains - and
+          exactly how much each one contributed to a risk score from 0 to 100. Optional
+          raw-header analysis adds SPF, DKIM, DMARC and Reply-To checks. Nothing the user
+          pastes ever leaves the browser.
+        </p>
+        <div class="badges" aria-label="Technologies used">
+          <span class="badge">HTML</span>
+          <span class="badge">CSS</span>
+          <span class="badge">Vanilla JavaScript</span>
+          <span class="badge">No dependencies</span>
+          <span class="badge badge-accent">Local-only analysis</span>
+        </div>
+
+        <div class="card-actions" style="margin-top:1.4rem;">
+          <a class="btn btn-primary" href="phishing-email-analyser/index.html">Open the live tool</a>
+          <a class="btn btn-ghost" href="#scoring">How the score works</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         01. PROJECT OVERVIEW
+         ====================================================================== -->
+    <section id="overview">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">01 · Overview</span>
+          <h2>Project overview</h2>
+        </div>
+
+        <div class="callout">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>This is an educational tool, not a security product.</strong> It highlights warning signs and it cannot prove that an email is malicious - or that it is safe. It is built to teach how phishing email is constructed, and to make that reasoning visible instead of hiding it behind a single verdict.</p>
+        </div>
+
+        <div class="prose">
+          <p>
+            Most phishing advice says "look for the warning signs" without ever showing what
+            those warning signs are made of. This project turns that advice into something
+            you can inspect. You paste an email, and the tool reports each pattern it
+            recognises, the number of points that pattern is worth, and the exact text that
+            triggered it.
+          </p>
+          <p>
+            The design goal was <strong>explainability</strong>. There is no hidden weighting,
+            no machine learning and no mystery score. Every rule has a fixed weight, the
+            interface lists which rules fired, and the arithmetic that produced the final
+            number is shown on screen as a table.
+          </p>
+
+          <h3>Objectives</h3>
+          <ul class="plan-list">
+            <li>Turn phishing-awareness theory into a tool a beginner can actually use and learn from.</li>
+            <li>Make the scoring model completely open - every point traceable to evidence.</li>
+            <li>Handle real content: clickable HTML links, look-alike domains, attachment names and raw email headers.</li>
+            <li>Prove the privacy claim architecturally: there is no server, so the data has nowhere to go.</li>
+            <li>Write automated tests so the detection logic can be changed safely later.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         02. HOW THE SCORE WORKS
+         ====================================================================== -->
+    <section id="scoring">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">02 · Scoring model</span>
+          <h2>How the score works, and why it is open</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            There are <strong>49 checks</strong> in total: 40 that read the email text and 9
+            that only run when raw email headers are supplied. Each check has a fixed weight
+            between 6 and 30 points. The weights of the checks that fire are added together
+            and the total is capped at 100.
+          </p>
+          <p>
+            The result is placed in one of three bands, and the interface shows the full
+            breakdown - the indicator, its severity, its points and the evidence - plus a
+            totals row, so the number can always be traced back to the text that caused it.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>Low Risk · 0-24</h3>
+            <p class="meta-line">Hardly any warning signs found</p>
+            <p>A low score means the text did not contain the patterns the analyser knows about. It is <strong>not</strong> a statement that the email is safe.</p>
+          </div>
+          <div class="card">
+            <h3>Suspicious · 25-59</h3>
+            <p class="meta-line">Several warning signs found</p>
+            <p>Enough indicators are present that the message should be verified independently before anyone acts on it.</p>
+          </div>
+          <div class="card">
+            <h3>High Risk · 60-100</h3>
+            <p class="meta-line">Many strong warning signs</p>
+            <p>Several high-weight indicators fired together. The guidance is to treat the message as hostile and not interact with it.</p>
+          </div>
+        </div>
+
+        <div class="prose" style="margin-top:1.5rem;">
+          <p>
+            Each individual finding is also given a severity label - <em>Very strong</em> (25+
+            points), <em>Strong</em> (15+), <em>Moderate</em> (10+) or <em>Weak</em> - so the
+            relative importance of the evidence is visible at a glance rather than being
+            flattened into a single total.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         03. WHAT IT CHECKS
+         ====================================================================== -->
+    <section id="detections">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">03 · Detection coverage</span>
+          <h2>What the analyser looks for</h2>
+          <p>Coverage is grouped into four areas. Header checks are deliberately optional and are never reported as "passed" when the headers were not supplied.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Email text</h3>
+            <div class="badges stack">
+              <span class="badge">Urgency &amp; pressure language</span>
+              <span class="badge">Very short deadlines</span>
+              <span class="badge">Account suspension threats</span>
+              <span class="badge">Password requests</span>
+              <span class="badge">MFA / one-time code requests</span>
+              <span class="badge">Credential-harvesting wording</span>
+              <span class="badge">Gift-card &amp; crypto requests</span>
+              <span class="badge">Bank-detail change requests</span>
+              <span class="badge">Secrecy and "quick favour" BEC wording</span>
+              <span class="badge">Unexpected invoice wording</span>
+              <span class="badge">Prize and refund bait</span>
+              <span class="badge">Macro / enable-editing instructions</span>
+              <span class="badge">Generic greetings &amp; impersonation wording</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Links</h3>
+            <div class="badges stack">
+              <span class="badge">Shortened links</span>
+              <span class="badge">Raw IP addresses</span>
+              <span class="badge">Abused top-level domains</span>
+              <span class="badge">Punycode look-alike domains</span>
+              <span class="badge">"@" userinfo trick</span>
+              <span class="badge">Brand in the wrong domain</span>
+              <span class="badge">Deliberate brand misspellings</span>
+              <span class="badge">Long subdomain chains</span>
+              <span class="badge">Unencrypted http:// links</span>
+              <span class="badge">Link text that lies about the target</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Attachment names</h3>
+            <div class="badges stack">
+              <span class="badge">Executables &amp; scripts (.exe, .scr, .js, .ps1, .lnk)</span>
+              <span class="badge">Macro-enabled documents (.docm, .xlsm, .pptm)</span>
+              <span class="badge">Compressed archives (.zip, .rar, .7z)</span>
+              <span class="badge">Double extensions (invoice.pdf.exe)</span>
+              <span class="badge">Unusual types for email (.html, .svg, .xml)</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Raw headers (optional)</h3>
+            <div class="badges stack">
+              <span class="badge">SPF fail &amp; softfail</span>
+              <span class="badge">DKIM fail</span>
+              <span class="badge">DMARC fail</span>
+              <span class="badge">Reply-To on a different domain</span>
+              <span class="badge">Return-Path mismatch</span>
+              <span class="badge">Display name spoofing</span>
+              <span class="badge">Replies sent to free webmail</span>
+              <span class="badge">No passing authentication at all</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warn" style="margin-top:1.5rem;">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg>
+          <p><strong>If headers are not pasted, the nine header checks are listed as "not checked" - never as passed.</strong> A tool that silently marked an unrun check as a success would give false reassurance, which is exactly the failure mode this project set out to avoid.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         04. PRIVACY
+         ====================================================================== -->
+    <section id="privacy">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">04 · Privacy architecture</span>
+          <h2>Why the email never leaves the browser</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            Phishing email contains real credentials, real bank details and real internal
+            conversations. Sending a suspicious message to an online "phishing checker"
+            means handing that content to somebody else's server. This project avoids the
+            problem by having no server at all.
+          </p>
+          <p>
+            The analyser is a set of static files. All detection, scoring and rendering happen
+            in the visitor's own browser. There is no backend, no database, no account, no AI
+            provider, no API key and no analytics.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>How the claim was verified</h3>
+            <ul class="check-list">
+              <li>Every shipped file was searched for <code>fetch</code>, <code>XMLHttpRequest</code>, <code>sendBeacon</code>, <code>WebSocket</code>, <code>EventSource</code>, cookies and <code>localStorage</code>.</li>
+              <li>The result was zero matches in the application code.</li>
+              <li>No script, stylesheet, font or image is loaded from another domain.</li>
+              <li>Because there is no endpoint, the pasted email has no destination.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Demonstration data is safe by design</h3>
+            <ul class="check-list">
+              <li>Every built-in example is fictional.</li>
+              <li>Only reserved domains are used: <code>example.com</code> and <code>example.net</code>.</li>
+              <li>IP addresses come from <code>192.0.2.0/24</code>, the documentation-only range that cannot be routed.</li>
+              <li>No example link resolves to a real or harmful server.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         05. TESTING
+         ====================================================================== -->
+    <section id="testing">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">05 · Testing</span>
+          <h2>Testing, and the bugs the tests caught</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            The detection logic is covered by <strong>103 automated checks</strong>: URL and
+            domain parsing, link classification, attachment classification, header parsing,
+            the arithmetic that produces the score, and a stated expectation for each of the
+            six demonstration emails.
+          </p>
+          <p>
+            The test suite can be run in a browser from <code>tests/tests.html</code>, or from
+            a command prompt using the JavaScript engine already present on Windows, so no
+            testing framework or package manager is needed.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Expected results of the built-in examples</h3>
+            <ul class="check-list">
+              <li><strong>Obvious phishing</strong> - 100/100, High Risk</li>
+              <li><strong>Sophisticated phishing</strong> - 46/100, Suspicious</li>
+              <li><strong>Fake Microsoft 365 warning</strong> - 100/100, High Risk</li>
+              <li><strong>Fake parcel delivery</strong> - 100/100, High Risk</li>
+              <li><strong>Fake invoice / BEC</strong> - 100/100, High Risk</li>
+              <li><strong>Legitimate email</strong> - 0/100, Low Risk</li>
+            </ul>
+            <p class="meta-line" style="margin-top:0.9rem;">The legitimate example scoring exactly zero is the important one: it proves the rules are not simply firing on everything.</p>
+          </div>
+
+          <div class="card">
+            <h3>Real defects found and fixed</h3>
+            <ul class="check-list">
+              <li>A URL inside a link's visible text was counted as a second link, inflating the link total - fixed by excluding the inside of anchor tags from the plain-text scan.</li>
+              <li>Attachment-name detection was reading filenames out of web addresses such as <code>/report.html</code> - fixed by stripping URLs and HTML before scanning.</li>
+              <li>A legitimate security notice saying "we will never ask for your password" tripped the password rule - fixed with an exemption list for protective wording.</li>
+              <li>Brand-misspelling detection only caught whole-word substitutions - extended so single-character swaps such as <code>micros0ft</code> are caught too.</li>
+              <li>A CSS rule was silently overriding the browser's <code>hidden</code> attribute on the results panel.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         06. HONEST LIMITATIONS
+         ====================================================================== -->
+    <section id="limitations">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">06 · Limitations</span>
+          <h2>What this tool cannot do</h2>
+          <p>Being clear about the limits is part of the design, not an afterthought.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Known limits</h3>
+            <ul class="check-list">
+              <li>It is a <strong>pattern matcher</strong>, not a threat-intelligence service. It looks nothing up online and has no idea whether a domain is currently malicious.</li>
+              <li>It only sees what is pasted. An email that is one big image, or whose attachment name never appears in the text, gives it little to work with.</li>
+              <li>Link-text comparison needs the email's HTML source; in plain text there is often no separate "visible text" to compare.</li>
+              <li>The wording rules are written in English, so they will miss equivalent phrasing in other languages.</li>
+              <li>It has no idea whether a message you were expecting is genuine. Context is the user's to supply.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>What it will never claim</h3>
+            <ul class="check-list">
+              <li>It will not state that an email <em>is</em> malicious.</li>
+              <li>It will not state that an email is safe - a low score is not a clean bill of health.</li>
+              <li>It will not tell a user to click a link or open an attachment to find out.</li>
+              <li>It will not present an unrun check as a passed check.</li>
+            </ul>
+            <p class="meta-line" style="margin-top:0.9rem;">The user-facing guidance is always to verify out of band: use the organisation's official app or website, or a phone number already held independently.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         07. TRY IT
+         ====================================================================== -->
+    <section id="try-it">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">07 · Try it</span>
+          <h2>Open the tool</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            The application is a single static page with no build step and no installation. It
+            runs offline, so once the page has loaded it works with the network disconnected.
+            Load one of the six fictional examples, or paste in an email of your own.
+          </p>
+        </div>
+
+        <div class="card-actions">
+          <a class="btn btn-primary" href="phishing-email-analyser/index.html">Open the live analyser</a>
+          <a class="btn btn-ghost" href="phishing-email-analyser/tests/tests.html">Run the 103 self-tests</a>
+          <a class="btn btn-ghost" href="../index.html#projects">All projects</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; <span id="year">2026</span> Jeremy Gimenez. Built as a static site with HTML, CSS and vanilla JavaScript.</p>
+      <nav aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">All projects</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

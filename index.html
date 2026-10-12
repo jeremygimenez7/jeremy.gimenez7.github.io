@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  JEREMY GIMENEZ - CYBERSECURITY PORTFOLIO
+  index.html
+  ----------------------------------------------------------------------------
+  THIS IS THE MAIN PAGE. The parts you will edit most often are marked with
+  big comment banners, e.g.  === MY NAME ===  or  === PROJECTS ===.
+  Search this file for "EDIT" to find every spot you may want to change.
+  ============================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- === SEO / SEARCH ENGINE INFO (EDIT) === -->
+  <title>Jeremy Gimenez | IT Specialist &amp; Aspiring Cybersecurity / SOC Analyst</title>
+  <meta name="description" content="Portfolio of Jeremy Gimenez, a CompTIA-certified (A+, Security+, CySA+) IT Specialist moving into cybersecurity. Hands-on home lab projects covering SIEM, Wazuh, file integrity monitoring and SOC workflows.">
+  <meta name="author" content="Jeremy Gimenez">
+  <meta name="theme-color" content="#0a0e13">
+
+  <!-- === OPEN GRAPH (how the link previews on LinkedIn etc.) (EDIT) === -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jeremy Gimenez | IT Specialist &amp; Aspiring Cybersecurity / SOC Analyst">
+  <meta property="og:description" content="CompTIA-certified IT Specialist building hands-on experience in SIEM, security monitoring and SOC workflows through home lab projects.">
+  <meta property="og:image" content="assets/favicon.svg">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Skip link: lets keyboard users jump straight to the content -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ========================================================================
+       HEADER / NAVIGATION
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <!-- === MY NAME (also shown in the top-left corner) (EDIT) === -->
+      <a class="brand" href="#top">
+        <span class="mark" aria-hidden="true">JG</span>
+        <span class="who">
+          <span>Jeremy Gimenez</span>
+          <small>Cybersecurity Portfolio</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span class="visually-hidden">Toggle navigation menu</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <nav aria-label="Primary">
+        <ul class="nav-links" id="primary-nav">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#certifications">Certifications</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ======================================================================
+         HERO SECTION
+         ====================================================================== -->
+    <section id="top" class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="status-chip">
+            <span class="dot" aria-hidden="true"></span>
+            Open to entry-level cybersecurity &amp; SOC roles
+          </span>
+
+          <!-- === MY NAME (EDIT) === -->
+          <h1>Jeremy Gimenez</h1>
+
+          <!-- === PROFESSIONAL HEADLINE (EDIT) === -->
+          <p class="headline">IT Specialist &nbsp;|&nbsp; Aspiring Cybersecurity / SOC Analyst</p>
+
+          <!-- === SHORT INTRODUCTION (EDIT) === -->
+          <p class="intro">
+            I am a CompTIA-certified IT professional with over three years of hands-on
+            technical support, troubleshooting and system administration experience,
+            now focused on moving into cybersecurity. I build home labs to develop
+            practical skills in security monitoring, log analysis and Security
+            Operations Centre (SOC) workflows — and I document what I build so the
+            work can be seen, not just claimed.
+          </p>
+
+          <!-- === HERO BUTTONS / SOCIAL LINKS (EDIT) ===
+               Update these links whenever your details change. -->
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#projects">View My Projects</a>
+            <!-- Swap "assets/resume.pdf" for your own redacted resume file -->
+            <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener noreferrer">
+              Download Resume
+            </a>
+            <a class="btn btn-ghost" href="https://www.linkedin.com/in/jeremy-gimenez-74589b134" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a class="btn btn-ghost" href="https://github.com/jeremygimenez7" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
+
+        <!-- Small "at a glance" card -->
+        <aside class="hero-card" aria-label="Quick profile summary">
+          <h3>At a glance</h3>
+          <ul class="hero-facts">
+            <li><span class="k">Current role</span> <span class="v">IT Specialist</span></li>
+            <li><span class="k">Certifications</span> <span class="v">A+ · Security+ · CySA+</span></li>
+            <li><span class="k">Experience</span> <span class="v">3+ years IT support</span></li>
+            <li><span class="k">Focus</span> <span class="v">SOC · SIEM · Monitoring</span></li>
+            <li><span class="k">Languages</span> <span class="v">English &amp; Spanish</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ABOUT ME
+         ====================================================================== -->
+    <section id="about">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">About me</span>
+          <h2>From IT support towards security operations</h2>
+        </div>
+
+        <div class="grid grid-2">
+          <!-- === ABOUT ME TEXT (EDIT) === -->
+          <div class="prose">
+            <p>
+              My background is in hands-on IT support. As an IT Specialist I provide
+              Tier 1–2 support, troubleshoot hardware, software and connectivity
+              problems, manage access and permissions through Active Directory, and
+              assist with system provisioning across on-premises and cloud
+              environments. A large part of that work is monitoring system logs,
+              escalating incidents and helping with root cause analysis — which is
+              what sparked my interest in security operations.
+            </p>
+            <p>
+              To build on that foundation I study through CompTIA (I hold the
+              A+, Security+ and CySA+ certifications) and I practise in my own
+              virtual home lab. Rather than only reading about tools, I deploy them:
+              my current focus is a Wazuh-based SIEM lab where I monitor endpoints,
+              investigate alerts and explore how OpenAI can support alert triage in
+              a SOC workflow.
+            </p>
+          </div>
+
+          <div class="prose">
+            <p>
+              I am most interested in roles that let me work with security
+              monitoring day to day — SOC Analyst, Cybersecurity Analyst or
+              security operations positions where detection, triage and
+              investigation are the core of the job.
+            </p>
+            <p>
+              I am bilingual (English and Spanish), I document my work carefully,
+              and I believe the most credible way to show what you can do is to
+              build it, break it and explain it. That is what this portfolio is
+              for.
+            </p>
+            <div class="badges" aria-label="Career focus areas">
+              <span class="badge badge-accent">SOC / Security Operations</span>
+              <span class="badge badge-accent">SIEM &amp; Log Analysis</span>
+              <span class="badge badge-accent">Endpoint Monitoring</span>
+              <span class="badge badge-accent">Incident Response</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         PROJECTS
+         Each project is a "card". The featured one links to a full case study.
+         To ADD a new project: copy one <article class="card project-card"> block,
+         paste it, and change the title, description, badges and links.
+         ====================================================================== -->
+    <section id="projects">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Projects</span>
+          <h2>Hands-on cybersecurity projects</h2>
+          <p>
+            These are self-directed home lab and educational projects, built to
+            develop and demonstrate practical security skills. Each one is
+            documented as a home lab so it is clear exactly what was lab work.
+          </p>
+          <!-- === GITHUB SECTION (EDIT) ===
+               Your public profile is linked below. The Wazuh lab repository
+               (wazuh-ai-soc-homelab) does not exist yet — it is mentioned on the
+               project page as "in preparation" and must not be linked until it
+               is actually published. -->
+          <p class="meta-line" style="margin-top:1rem;">
+            <strong>Code &amp; documentation:</strong>
+            <a href="https://github.com/jeremygimenez7" target="_blank" rel="noopener noreferrer">github.com/jeremygimenez7</a>
+            &nbsp;·&nbsp; home lab notes and repositories are published here as they are written up.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+
+          <!-- ---------- FEATURED PROJECT: WAZUH SOC LAB ---------- -->
+          <article class="card project-card featured">
+            <span class="featured-tag">Featured project</span>
+            <h3>AI-Powered SOC &amp; Security Monitoring Lab | Wazuh SIEM</h3>
+
+            <p class="meta-line">
+              <strong>Home lab</strong> &nbsp;·&nbsp; Security domains: SOC / Security Operations, SIEM, Endpoint Monitoring
+            </p>
+
+            <p>
+              Built a virtualised Security Operations Centre lab to practise
+              real monitoring workflows: deployed a Wazuh SIEM manager on Ubuntu
+              Server, enrolled a Windows endpoint, configured File Integrity
+              Monitoring to generate alerts, and combined it with an
+              OpenAI-powered analysis component to explore how AI can support
+              alert interpretation during SOC-style investigation.
+            </p>
+
+            <div class="badges stack" aria-label="Technologies used">
+              <span class="badge">Wazuh SIEM</span>
+              <span class="badge">Ubuntu Server</span>
+              <span class="badge">Windows</span>
+              <span class="badge">Oracle VirtualBox</span>
+              <span class="badge">File Integrity Monitoring</span>
+              <span class="badge">OpenAI-powered analysis</span>
+            </div>
+
+            <div class="card-actions">
+              <a class="btn btn-primary btn-sm" href="projects/wazuh-soc-lab.html">View Project</a>
+              <a class="btn btn-ghost btn-sm" href="https://github.com/jeremygimenez7" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </article>
+
+          <!-- ---------- PROJECT 2: PHISHING EMAIL ANALYSER ---------- -->
+          <article class="card project-card">
+            <h3>Phishing Email Analyser - Local, Explainable Email Triage</h3>
+
+            <p class="meta-line">
+              <strong>Static web app</strong> &nbsp;·&nbsp; Security domains: Phishing &amp; Social Engineering, Detection Engineering, Security Awareness
+            </p>
+
+            <p>
+              Built an educational triage tool that scores a pasted email from 0 to 100
+              against 49 warning-sign checks and shows exactly how that number was
+              reached. It looks for urgency and pressure language, account-suspension
+              threats, password and MFA-code requests, gift-card and bank-detail-change
+              requests, look-alike, shortened and raw-IP links, dangerous attachment
+              types and macro instructions. Pasting raw headers unlocks SPF, DKIM,
+              DMARC, Reply-To and display-name checks. Every point is traced back to
+              the evidence that produced it, and the analysis runs entirely in the browser.
+            </p>
+
+            <div class="badges stack" aria-label="Technologies used">
+              <span class="badge">HTML / CSS / JavaScript</span>
+              <span class="badge">49 explainable checks</span>
+              <span class="badge">SPF / DKIM / DMARC header parsing</span>
+              <span class="badge">Link &amp; look-alike domain analysis</span>
+              <span class="badge">No dependencies</span>
+              <span class="badge badge-accent">Local-only, nothing uploaded</span>
+            </div>
+
+            <div class="card-actions">
+              <a class="btn btn-primary btn-sm" href="projects/phishing-email-analyser.html">View Project</a>
+              <a class="btn btn-ghost btn-sm" href="projects/phishing-email-analyser/index.html">Open the tool</a>
+            </div>
+          </article>
+
+          <!-- ---------- PROJECT 3: NETWORK TRAFFIC TRIAGE TOOL ---------- -->
+          <article class="card project-card">
+            <h3>Network Traffic Triage Tool - Wireshark CSV Analysis</h3>
+
+            <p class="meta-line">
+              <strong>Static web app</strong> &nbsp;·&nbsp; Security domains: Network Traffic Analysis, Detection Rules, Blue-Team Triage
+            </p>
+
+            <p>
+              Turns a Wireshark packet-list CSV export into an explainable network
+              activity report using six transparent threshold rules and no AI or machine
+              learning. The rules cover high packet volume, possible network and port
+              scanning, high ICMP activity, high DNS activity and repeated
+              source-to-destination communication. Thresholds are adjustable so a learner
+              can see how a configuration change alters the result without changing the
+              underlying evidence. Includes three fictional sample captures and a
+              dependency-free browser test suite.
+            </p>
+
+            <div class="badges stack" aria-label="Technologies used">
+              <span class="badge">Wireshark CSV parsing</span>
+              <span class="badge">6 explainable detection rules</span>
+              <span class="badge">Adjustable thresholds</span>
+              <span class="badge">Fictional sample captures</span>
+              <span class="badge">Dependency-free test suite</span>
+              <span class="badge badge-accent">Content-Security-Policy locked down</span>
+            </div>
+
+            <div class="card-actions">
+              <a class="btn btn-primary btn-sm" href="projects/network-traffic-triage.html">View Project</a>
+              <a class="btn btn-ghost btn-sm" href="projects/network-traffic-triage/index.html">Open the tool</a>
+            </div>
+          </article>
+
+          <!-- ---------- PROJECT 4: WINDOWS SECURITY EVENT LOG TRIAGE TOOL ---------- -->
+          <article class="card project-card">
+            <h3>Windows Security Event Log Triage Tool - SOC-Style Log Analysis</h3>
+
+            <p class="meta-line">
+              <strong>Static web app</strong> &nbsp;·&nbsp; Security domains: Log Analysis, Event Correlation, SOC Triage, Incident Investigation
+            </p>
+
+            <p>
+              Reads a Windows Event Viewer Security-log CSV export and produces a
+              plain-English SOC triage report: what happened, why it may deserve
+              investigation, what ordinary activity could explain it, and what to check
+              next. Correlation rules link failed-then-successful logons, account creation
+              followed by privileged group membership, audit-log clearing and encoded
+              PowerShell. Every finding carries an itemised score with the reason for each
+              point, and each one lists its legitimate explanations.
+            </p>
+
+            <div class="badges stack" aria-label="Technologies used">
+              <span class="badge">10 supported Windows Event IDs</span>
+              <span class="badge">Event correlation rules</span>
+              <span class="badge">Itemised, explainable scoring</span>
+              <span class="badge">False-positive explanations</span>
+              <span class="badge">CSV parsing hardened against injection</span>
+              <span class="badge badge-accent">Local-only, logs never uploaded</span>
+            </div>
+
+            <div class="card-actions">
+              <a class="btn btn-primary btn-sm" href="projects/windows-event-triage.html">View Project</a>
+              <a class="btn btn-ghost btn-sm" href="projects/windows-event-triage/index.html">Open the tool</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SKILLS
+         Grouped as clean tags — deliberately no "percentages", because those
+         are not meaningful. To edit: change the <span class="badge"> items.
+         ====================================================================== -->
+    <section id="skills">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Skills</span>
+          <h2>Technical skills &amp; tools</h2>
+          <p>Grouped by area, based on the tools and concepts I have actually worked with in IT support roles and home lab projects.</p>
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="card skill-card">
+            <h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6l7-3z"/></svg>
+              Security Operations
+            </h3>
+            <div class="badges">
+              <span class="badge">SIEM</span>
+              <span class="badge">SOAR</span>
+              <span class="badge">Log Analysis</span>
+              <span class="badge">Threat Detection</span>
+              <span class="badge">Incident Response</span>
+              <span class="badge">Security Monitoring</span>
+            </div>
+          </div>
+
+          <div class="card skill-card">
+            <h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M12 7.2V13M12 13L6.4 17.2M12 13l5.6 4.2"/></svg>
+              Network Security
+            </h3>
+            <div class="badges">
+              <span class="badge">DNS</span>
+              <span class="badge">DHCP</span>
+              <span class="badge">VPN</span>
+              <span class="badge">Network Traffic Analysis</span>
+            </div>
+          </div>
+
+          <div class="card skill-card">
+            <h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+              Operating Systems
+            </h3>
+            <div class="badges">
+              <span class="badge">Windows</span>
+              <span class="badge">Linux</span>
+              <span class="badge">Ubuntu</span>
+              <span class="badge">CentOS</span>
+              <span class="badge">Debian</span>
+              <span class="badge">Ubuntu Server</span>
+            </div>
+          </div>
+
+          <div class="card skill-card">
+            <h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V8a5 5 0 0110 0v3"/><rect x="5" y="11" width="14" height="9" rx="2"/></svg>
+              Identity &amp; Access
+            </h3>
+            <div class="badges">
+              <span class="badge">Active Directory</span>
+              <span class="badge">Access &amp; Permissions Management</span>
+            </div>
+          </div>
+
+          <div class="card skill-card">
+            <h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 01-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 005.4-5.4l-2.3 2.3-2-2 2.3-2.3z"/></svg>
+              Security Tools &amp; Platforms
+            </h3>
+            <div class="badges">
+              <span class="badge">Wazuh SIEM</span>
+              <span class="badge">Wazuh Agent</span>
+              <span class="badge">File Integrity Monitoring</span>
+              <span class="badge">ossec.conf configuration</span>
+              <span class="badge">Oracle VirtualBox</span>
+              <span class="badge">OpenAI (AI-assisted analysis)</span>
+            </div>
+          </div>
+
+          <div class="card skill-card">
+            <h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 019 9c0 1.7-1.3 3-3 3h-2a2 2 0 00-1.4 3.4A2 2 0 0111 20a9 9 0 01-9-9 9 9 0 0110-8z"/></svg>
+              IT Support &amp; Troubleshooting
+            </h3>
+            <div class="badges">
+              <span class="badge">Tier 1–2 Support</span>
+              <span class="badge">Hardware/Software Diagnostics</span>
+              <span class="badge">Server Maintenance</span>
+              <span class="badge">Root Cause Analysis</span>
+              <span class="badge">Documentation</span>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="meta-line" style="margin-top:1.4rem;">
+          <strong>Languages:</strong> English (professional) &nbsp;·&nbsp; Spanish (fluent / bilingual)
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         EXPERIENCE
+         To edit: change the role title, org, dates and bullet points below.
+         ====================================================================== -->
+    <section id="experience">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Experience</span>
+          <h2>Work experience</h2>
+          <p>My professional experience so far is in IT support and operations. Earlier roles are included because they built transferable skills in communication, teamwork and problem-solving.</p>
+        </div>
+
+        <ol class="timeline">
+          <li>
+            <div class="tl-head">
+              <h3>IT Specialist</h3>
+              <span class="tl-when">June 2022 – Present</span>
+            </div>
+            <p class="tl-org">Spencer Gifts</p>
+            <ul>
+              <li>Provide Tier 1–2 technical support for employees, resolving issues related to hardware, software, Windows OS, printers, VPN and internal applications.</li>
+              <li>Troubleshoot software, hardware and connectivity issues while managing access and permissions via Active Directory.</li>
+              <li>Assist in system provisioning and configuration updates across on-premises and cloud environments.</li>
+              <li>Monitor system logs, escalate incidents and perform root cause analysis in collaboration with cybersecurity engineers.</li>
+              <li>Led a nationwide project involving application testing, patching and upgrades to ensure operational continuity and compliance.</li>
+              <li>Escalate issues, emphasising browser compatibility, network latency and endpoint security.</li>
+              <li>Document troubleshooting procedures and implement knowledge-sharing practices to reduce manual overhead.</li>
+            </ul>
+          </li>
+
+          <li>
+            <div class="tl-head">
+              <h3>Warehouse Associate</h3>
+              <span class="tl-when">Sept 2016 – June 2019 &amp; Nov 2020 – June 2022</span>
+            </div>
+            <p class="tl-org">Ross Distribution Center</p>
+            <ul>
+              <li>Optimised product movement through problem-solving and efficient workflow improvements.</li>
+            </ul>
+          </li>
+
+          <li>
+            <div class="tl-head">
+              <h3>Recreation Assistant</h3>
+              <span class="tl-when">June 2019 – Nov 2020</span>
+            </div>
+            <p class="tl-org">Mecklenburg County</p>
+            <ul>
+              <li>Fostered team trust and communication to improve overall performance.</li>
+              <li>Planned and led activities that served and supported the local community.</li>
+              <li>Built team chemistry to ensure effective, confident communication.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         EDUCATION
+         Only the High School Diploma is listed, because that is the only
+         education credential held (confirmed by Jeremy). Graduated 2016.
+         If you later want to mention the college coursework (four years at
+         Central Piedmont Community College, no credential awarded), add it back
+         as a "coursework" entry — clearly labelled as coursework, never as a
+         qualification.
+         EDIT or delete this whole section if you would rather not list education.
+         ====================================================================== -->
+    <section id="education">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Education</span>
+          <h2>Education &amp; study</h2>
+        </div>
+
+        <ol class="timeline">
+          <li>
+            <div class="tl-head">
+              <h3>High School Diploma</h3>
+              <span class="tl-when">2016</span>
+            </div>
+            <p class="tl-org">Olympic High School</p>
+          </li>
+
+          <li>
+            <div class="tl-head">
+              <h3>Self-Directed Cybersecurity Study</h3>
+              <span class="tl-when">Ongoing</span>
+            </div>
+            <p class="tl-org">Independent study &amp; hands-on home labs</p>
+            <ul>
+              <li>Studied through the CompTIA certification path (A+, Security+, CySA+) and applied the concepts in hands-on home lab projects.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         CERTIFICATIONS
+         Only certifications you have actually earned belong in the "Earned"
+         group. Anything you are still preparing for belongs under
+         "In Progress" — never present an in-progress cert as complete.
+         ====================================================================== -->
+    <section id="certifications">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Certifications</span>
+          <h2>Certifications</h2>
+          <p>CompTIA certifications earned. Certification ID / verification numbers are not published here.</p>
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="cert">
+            <span class="seal" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L7 22l5-2.5L17 22l-1.5-8.5"/></svg>
+            </span>
+            <div>
+              <h3>CompTIA A+</h3>
+              <p class="issuer">CompTIA</p>
+              <span class="cert-status earned">Earned</span>
+            </div>
+          </div>
+
+          <div class="cert">
+            <span class="seal" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L7 22l5-2.5L17 22l-1.5-8.5"/></svg>
+            </span>
+            <div>
+              <h3>CompTIA Security+</h3>
+              <p class="issuer">CompTIA</p>
+              <span class="cert-status earned">Earned</span>
+            </div>
+          </div>
+
+          <div class="cert">
+            <span class="seal" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L7 22l5-2.5L17 22l-1.5-8.5"/></svg>
+            </span>
+            <div>
+              <h3>CompTIA CySA+</h3>
+              <p class="issuer">CompTIA</p>
+              <span class="cert-status earned">Earned</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- === CURRENTLY STUDYING / IN PROGRESS (EDIT) ===
+             Nothing is listed here right now. When you start preparing for a
+             new certification, add it below using the same .cert block, but
+             with class="cert-status progress" and the text "In progress".
+        -->
+        <div class="section-head" style="margin:2.4rem 0 1.2rem;">
+          <h3 style="font-size:1.05rem; margin-bottom:0.3rem;">Currently studying</h3>
+          <p style="font-size:0.92rem;">No certifications are currently in progress. This section will list any future certifications while they are being studied — clearly marked as in progress, never as complete.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         CONTACT / SOCIAL LINKS  (EDIT)
+         Only public, professional contact details appear here.
+         Private details (phone number, ID numbers) are intentionally omitted.
+         ====================================================================== -->
+    <section id="contact">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Contact</span>
+          <h2>Get in touch</h2>
+          <p>I am actively looking for entry-level cybersecurity and SOC opportunities. The quickest way to reach me is email or LinkedIn.</p>
+        </div>
+
+        <div class="contact-grid">
+
+          <a class="contact-item" href="mailto:jeremy.gimenez7@gmail.com">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <span>
+              <span class="lbl">Email</span>
+              <span class="val">jeremy.gimenez7@gmail.com</span>
+            </span>
+          </a>
+
+          <a class="contact-item" href="https://www.linkedin.com/in/jeremy-gimenez-74589b134" target="_blank" rel="noopener noreferrer">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.76-2.05C20.4 8.65 21 11 21 14.1V21h-4v-6.1c0-1.45-.03-3.32-2.02-3.32-2.02 0-2.33 1.58-2.33 3.21V21H9z"/></svg>
+            <span>
+              <span class="lbl">LinkedIn</span>
+              <span class="val">jeremy-gimenez</span>
+            </span>
+          </a>
+
+          <a class="contact-item" href="https://github.com/jeremygimenez7" target="_blank" rel="noopener noreferrer">
+            <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
+            <span>
+              <span class="lbl">GitHub</span>
+              <span class="val">jeremygimenez7</span>
+            </span>
+          </a>
+
+        </div>
+
+        <!-- === RESUME FILE (EDIT) ===
+             To publish a downloadable resume, create a REDACTED copy (remove your
+             phone number, ID numbers, references and address) and save it as:
+                 assets/resume.pdf
+             Then the "Download Resume" button at the top of this page will work.
+        -->
+        <p class="meta-line" style="margin-top:1.4rem;">
+          <strong>Resume:</strong> a redacted PDF is available from the button at the top of this page.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; <span id="year">2026</span> Jeremy Gimenez. Built as a static site with HTML, CSS and vanilla JavaScript.</p>
+      <nav aria-label="Footer">
+        <a href="#top">Back to top</a>
+        <a href="https://www.linkedin.com/in/jeremy-gimenez-74589b134" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/jeremygimenez7" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

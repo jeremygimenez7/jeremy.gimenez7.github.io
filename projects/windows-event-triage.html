@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  PROJECT CASE STUDY - Windows Security Event Log Triage Tool
+  projects/windows-event-triage.html
+  ----------------------------------------------------------------------------
+  Detailed write-up of the Windows Event Viewer CSV triage tool.
+  The working application itself lives in projects/windows-event-triage/.
+  NOTE: this file lives in the /projects/ folder, so links to shared files start
+  with "../" (e.g. ../css/styles.css).
+  ============================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Windows Security Event Log Triage Tool | Jeremy Gimenez</title>
+  <meta name="description" content="An educational SOC triage tool for Windows Event Viewer CSV exports: event correlation, an itemised and explainable score, and plain-English findings that list their own false positives.">
+  <meta name="author" content="Jeremy Gimenez">
+  <meta name="theme-color" content="#0a0e13">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Windows Security Event Log Triage Tool | Jeremy Gimenez">
+  <meta property="og:description" content="Turn a Windows Event Viewer CSV export into a plain-English SOC triage report: what happened, why it may matter, what could explain it benignly, and what to check next.">
+  <meta property="og:image" content="../assets/favicon.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="../index.html">
+        <span class="mark" aria-hidden="true">JG</span>
+        <span class="who">
+          <span>Jeremy Gimenez</span>
+          <small>Cybersecurity Portfolio</small>
+        </span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links" id="primary-nav">
+          <li><a href="../index.html#about">About</a></li>
+          <li><a href="../index.html#projects">Projects</a></li>
+          <li><a href="../index.html#skills">Skills</a></li>
+          <li><a href="../index.html#certifications">Certifications</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap breadcrumb">
+      <a href="../index.html">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="../index.html#projects">Projects</a>
+      <span aria-hidden="true">/</span>
+      <span>Windows Security Event Log Triage Tool</span>
+    </div>
+
+    <section class="project-hero">
+      <div class="wrap">
+        <span class="badge badge-domain">Education &amp; tooling · Log Analysis &amp; SOC Triage</span>
+        <h1>Windows Security Event Log Triage Tool - SOC-Style Log Analysis</h1>
+        <p class="lede">
+          A static browser application that reads a Windows Event Viewer Security-log CSV export
+          and produces a plain-English triage report: what happened, why it might deserve
+          investigation, what ordinary activity could explain it, and what to check next. Every
+          finding carries an itemised score showing exactly why each point was awarded.
+        </p>
+        <div class="badges" aria-label="Technologies used">
+          <span class="badge">HTML</span>
+          <span class="badge">CSS</span>
+          <span class="badge">Vanilla JavaScript</span>
+          <span class="badge">Event correlation logic</span>
+          <span class="badge badge-accent">Local-only analysis</span>
+        </div>
+
+        <div class="card-actions" style="margin-top:1.4rem;">
+          <a class="btn btn-primary" href="windows-event-triage/index.html">Open the live tool</a>
+          <a class="btn btn-ghost" href="#rules">See the detection logic</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         01. OVERVIEW
+         ====================================================================== -->
+    <section id="overview">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">01 · Overview</span>
+          <h2>Project overview</h2>
+        </div>
+
+        <div class="callout">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>An educational SOC triage tool.</strong> Findings indicate activity that may deserve investigation and do not prove malicious behaviour. Only analyse logs from systems you own or are authorised to investigate.</p>
+        </div>
+
+        <div class="prose">
+          <p>
+            Windows security logs are dense. A single export can contain thousands of ordinary
+            logons, and the interesting events are invisible until you know what to look for and
+            how to link events together. This tool exists to make that reasoning explicit.
+          </p>
+          <p>
+            It is deliberately <strong>not</strong> a fake "AI detects hackers" product. There is
+            no probability of compromise, no severity of "Critical", and no claim that any single
+            event proves an intrusion. It teaches four things instead:
+          </p>
+
+          <h3>What the project teaches</h3>
+          <ul class="plan-list">
+            <li><strong>How Windows security events work</strong> - what event 4624 actually records, why the logon type changes its meaning, and why the same event behaves differently on a workstation and a server.</li>
+            <li><strong>How analysts correlate events</strong> - why three failed logons followed by a success is a more interesting object than four separate rows.</li>
+            <li><strong>How false positives happen</strong> - every finding lists the ordinary explanations, because most alerts in a real SOC have one.</li>
+            <li><strong>How to decide what deserves investigation</strong> - using a transparent score where each point is shown next to the reason it was awarded.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         02. SUPPORTED EVENT IDS
+         ====================================================================== -->
+    <section id="events">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">02 · Event coverage</span>
+          <h2>Ten Windows Event IDs, explained</h2>
+          <p>Ten Event IDs, learned properly, are worth more than a thousand skimmed. The tool recognises and explains this set rather than guessing at everything else.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Authentication events</h3>
+            <div class="badges stack">
+              <span class="badge">4624 · Successful logon</span>
+              <span class="badge">4625 · Failed logon</span>
+              <span class="badge">4672 · Special privileges assigned</span>
+            </div>
+            <p class="meta-line" style="margin-top:0.9rem;">The tool extracts the account, logon type, source IP, workstation, process and failure reason, because a logon type 5 service account is very different from a logon type 2 person at a keyboard.</p>
+          </div>
+
+          <div class="card">
+            <h3>Account and privilege changes</h3>
+            <div class="badges stack">
+              <span class="badge">4720 · User account created</span>
+              <span class="badge">4726 · User account deleted</span>
+              <span class="badge">4728 · Added to a global group</span>
+              <span class="badge">4732 · Added to a local group</span>
+            </div>
+            <p class="meta-line" style="margin-top:0.9rem;">Membership of a privileged group escalates a finding, because creating an account and then granting it power is a recognised persistence pattern.</p>
+          </div>
+
+          <div class="card">
+            <h3>Execution and defence evasion</h3>
+            <div class="badges stack">
+              <span class="badge">4688 · Process created</span>
+              <span class="badge">4104 · PowerShell script block</span>
+            </div>
+            <p class="meta-line" style="margin-top:0.9rem;">Encoded PowerShell raises a finding and the related 4688 process-creation event is attached as supporting evidence rather than being reported separately.</p>
+          </div>
+
+          <div class="card">
+            <h3>Anti-forensics</h3>
+            <div class="badges stack">
+              <span class="badge">1102 · Security audit log cleared</span>
+            </div>
+            <p class="meta-line" style="margin-top:0.9rem;">Clearing the security audit log always produces a High finding. There are legitimate reasons to do it, and the finding still says so - but it is never treated as routine.</p>
+          </div>
+        </div>
+
+        <div class="callout warn" style="margin-top:1.5rem;">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg>
+          <p><strong>Deliberately out of scope:</strong> scheduled-task events, Sysmon, Defender events, and anything requiring raw <code>.evtx</code> parsing. A narrow tool that explains its own coverage honestly is more useful for learning than a broad tool that pretends to understand everything.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         03. CORRELATION RULES
+         ====================================================================== -->
+    <section id="rules">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">03 · Detection logic</span>
+          <h2>Correlation, not just counting</h2>
+          <p>The interesting part of log analysis is not finding one event. It is noticing that several events belong together.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Repeated authentication failures</h3>
+            <p>Failures are counted per account and source. A count at the threshold is Low; at twice the threshold it becomes Medium, and the finding states which case applied and why.</p>
+          </div>
+          <div class="card">
+            <h3>Failures followed by a success</h3>
+            <p>The high-value pattern. Failures then a success from the same IP inside the window is High. A success from a different IP an hour later is Medium with an explicit "not strong" note, because that is genuinely weaker evidence.</p>
+          </div>
+          <div class="card">
+            <h3>Account creation into privilege</h3>
+            <p>A 4720 followed by a 4732 for the same account is High. The finding shows the sequence and the elapsed time, and it absorbs the standalone "account created" observation so the same activity is never counted twice.</p>
+          </div>
+          <div class="card">
+            <h3>Security log cleared</h3>
+            <p>Event 1102 always produces a High finding. It is one of the few events where the absence of further evidence is itself worth reporting.</p>
+          </div>
+          <div class="card">
+            <h3>Privileged group changes</h3>
+            <p>Administrative and privilege-related group changes are grouped by who made them, so unrelated actors do not get merged into one misleading pile.</p>
+          </div>
+          <div class="card">
+            <h3>Encoded PowerShell</h3>
+            <p>Base64-encoded script blocks are detected, and the related process-creation event is attached as supporting evidence instead of appearing as a separate finding.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         04. EXPLAINABLE SCORING
+         ====================================================================== -->
+    <section id="scoring">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">04 · Scoring model</span>
+          <h2>An itemised score, not a black box</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            Findings are graded as <em>Informational</em>, <em>Low</em>, <em>Medium</em> or
+            <em>High</em>. Alongside the grades, each finding contributes a number of points, and
+            the interface itemises every contribution with the reason it was awarded. When the
+            total exceeds the maximum, the score is capped at 100 and the cap is disclosed rather
+            than hidden.
+          </p>
+          <p>
+            The score exists to order investigation effort. It is not a probability of compromise
+            and it is never presented as one.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Every finding includes</h3>
+            <ul class="check-list">
+              <li>What happened, in plain English.</li>
+              <li>The events that support it, with their identifiers.</li>
+              <li>Why it may deserve investigation.</li>
+              <li>The legitimate activity that could explain it.</li>
+              <li>A concrete next step, such as which record to check next.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>What it deliberately avoids</h3>
+            <ul class="check-list">
+              <li>No probability that a machine is compromised.</li>
+              <li>No "Critical" severity that implies certainty.</li>
+              <li>No hidden weighting or unexplained score.</li>
+              <li>No finding that suppresses its own false positives.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         05. PRIVACY AND SECURITY
+         ====================================================================== -->
+    <section id="privacy">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">05 · Privacy &amp; security</span>
+          <h2>Your logs stay on your machine</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            Windows security logs contain usernames, computer names, IP addresses and internal
+            process paths. This tool analyses them locally in the browser. Files are not uploaded
+            or transmitted anywhere, and the README explains how to verify that claim rather than
+            simply asserting it.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Network isolation, demonstrated</h3>
+            <ul class="check-list">
+              <li>The whole test suite was re-run with <code>fetch</code>, <code>XMLHttpRequest</code> and <code>sendBeacon</code> replaced by functions designed to fail loudly.</li>
+              <li>No call was ever made, which is evidence rather than a promise.</li>
+              <li>There is no backend, database, cloud service, API key or external dependency.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Hardened against hostile input</h3>
+            <ul class="check-list">
+              <li>A test CSV whose account, computer and IP fields contain script and image payloads creates no elements and runs nothing.</li>
+              <li>The payload renders as plain text in the table, the findings and the filter options.</li>
+              <li>Event data is treated as untrusted throughout, because a log export is attacker-influenced content.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         06. TESTING
+         ====================================================================== -->
+    <section id="testing">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">06 · Testing</span>
+          <h2>Testing, and the bugs it found</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            The logic was tested against the documented rule behaviour, the sample datasets and
+            hostile input. The four sample CSV files were also parsed by a second, independently
+            written reader to confirm the files themselves are well formed and that each one
+            produces the same findings as the embedded demo data.
+          </p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Defects found and fixed</h3>
+            <ul class="check-list">
+              <li><strong>The suspicious-service-path check never matched anything.</strong> A regular expression had been written with doubled backslashes, so it could never match a real Windows path. A service installed from a user-writable folder was therefore never escalated. Fixed by normalising path separators first.</li>
+              <li><strong>The timeline implied a chronology it could not support.</strong> With no usable timestamps, events were still listed under a "Timeline" heading in file order, which could be misread as a time sequence. Fixed by detecting that case and stating the order is the file's, not time's.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Honesty about the test results</h3>
+            <ul class="check-list">
+              <li>Two early test failures turned out to be <strong>errors in the tests, not the application</strong>: an incorrect expected count of successful logons, and an assumed severity threshold the documented rule does not use.</li>
+              <li>Both were corrected in the tests rather than by changing working behaviour, which is the point of writing the expectation down first.</li>
+              <li>No alert was ever produced for the known-good sample beyond informational level.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         07. FALSE POSITIVES AND LIMITATIONS
+         ====================================================================== -->
+    <section id="limitations">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">07 · False positives</span>
+          <h2>Where the findings can mislead</h2>
+          <p>Every finding lists its own legitimate explanations. These are the traps the project documents openly.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Common false positives</h3>
+            <ul class="check-list">
+              <li>On a real machine, logon types 3 and 5 (network and service logons by SYSTEM and machine accounts) are extremely common and are not evidence of anything.</li>
+              <li>Administrative activity by a genuine administrator looks identical to administrative activity by an intruder.</li>
+              <li>Scheduled tasks, backup software and monitoring agents generate privileged activity on a timer.</li>
+              <li>Service-installation findings depend on whether process-creation auditing is even enabled.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Scope limitations</h3>
+            <ul class="check-list">
+              <li>CSV exports only. Raw <code>.evtx</code> files are not parsed.</li>
+              <li>Scheduled tasks, Sysmon and Defender events are out of scope in Version 1.</li>
+              <li>Localised Windows messages are handled, but the tool warns when it could not read the labels.</li>
+              <li>Without usable timestamps the correlation window cannot be applied, and the tool says so rather than guessing.</li>
+              <li>It teaches triage. It is not a replacement for a SIEM or for an organisation's incident-response process.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         08. TRY IT
+         ====================================================================== -->
+    <section id="try-it">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">08 · Try it</span>
+          <h2>Open the tool</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            Four fictional sample datasets are built in: normal activity, password-guessing,
+            suspicious administrative activity and account persistence. The normal dataset is the
+            most instructive, because it shows how much ordinary noise a real export contains and
+            how the tool explains rather than hides it.
+          </p>
+        </div>
+
+        <div class="card-actions">
+          <a class="btn btn-primary" href="windows-event-triage/index.html">Open the live tool</a>
+          <a class="btn btn-ghost" href="../index.html#projects">All projects</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; <span id="year">2026</span> Jeremy Gimenez. Built as a static site with HTML, CSS and vanilla JavaScript.</p>
+      <nav aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">All projects</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

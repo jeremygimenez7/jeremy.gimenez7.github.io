@@ -1,0 +1,75 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Length 3552 >>
+stream
+BT /F2 12.5 Tf 60 740 Td (JEREMY GIMENEZ) Tj ET
+BT /F2 10.5 Tf 60 726 Td (IT Specialist | Aspiring Cybersecurity / SOC Analyst) Tj ET
+BT /F1 9 Tf 60 712 Td (jeremy.gimenez7@gmail.com  |  linkedin.com/in/jeremy-gimenez-74589b134  |  github.com/jeremygimenez7) Tj ET
+BT /F2 12.5 Tf 60 686 Td (SUMMARY) Tj ET
+BT /F1 10 Tf 60 672 Td (IT Specialist with 3+ years of hands-on technical support, troubleshooting, and system) Tj ET
+BT /F1 10 Tf 60 658 Td (administration experience seeking a cybersecurity / SOC role. Dedicated to delivering) Tj ET
+BT /F1 10 Tf 60 644 Td (excellent customer service and supporting modern workplace technologies.) Tj ET
+BT /F2 12.5 Tf 60 618 Td (CERTIFICATIONS) Tj ET
+BT /F1 10 Tf 60 604 Td (CompTIA A+  \(Earned\)) Tj ET
+BT /F1 10 Tf 60 590 Td (CompTIA Security+  \(Earned\)) Tj ET
+BT /F1 10 Tf 60 576 Td (CompTIA CySA+  \(Earned\)) Tj ET
+BT /F2 12.5 Tf 60 550 Td (TECHNICAL SKILLS) Tj ET
+BT /F1 10 Tf 60 536 Td (Security Tools & Concepts: SIEM, SOAR, Log Analysis, Threat Detection, Incident Response) Tj ET
+BT /F1 10 Tf 60 522 Td (Networking: DNS, DHCP, VPNs, Network Traffic Analysis) Tj ET
+BT /F1 10 Tf 60 508 Td (Operating Systems: Linux \(Ubuntu, CentOS, Debian\), Windows) Tj ET
+BT /F1 10 Tf 60 494 Td (Identity: Active Directory; access and permissions management) Tj ET
+BT /F1 10 Tf 60 480 Td (Troubleshooting: Hardware/Software Diagnostics, Server Maintenance) Tj ET
+BT /F1 10 Tf 60 466 Td (Languages: English, Spanish \(fluent / bilingual\)) Tj ET
+BT /F2 12.5 Tf 60 440 Td (PROJECTS) Tj ET
+BT /F2 10.5 Tf 60 426 Td (AI-Powered SOC & Security Monitoring Lab | Wazuh SIEM  \(Home lab\)) Tj ET
+BT /F1 10 Tf 60 412 Td (Deployed Wazuh SIEM on an Ubuntu Server VM, enrolled a Windows endpoint, configured File) Tj ET
+BT /F1 10 Tf 60 398 Td (Integrity Monitoring and reviewed alerts; combined it with an OpenAI-powered SOC analysis) Tj ET
+BT /F1 10 Tf 60 384 Td (component to explore AI-assisted alert triage.) Tj ET
+BT /F2 10.5 Tf 60 370 Td (CompTIA CySA+ Home Lab - Secure Browser & Threat Detection Simulation  \(Home lab\)) Tj ET
+BT /F1 10 Tf 60 356 Td (Built a virtual machine lab to simulate and detect threats using open-source tools, basic) Tj ET
+BT /F1 10 Tf 60 342 Td (SIEM functionality and log analysis.) Tj ET
+BT /F2 12.5 Tf 60 316 Td (WORK EXPERIENCE) Tj ET
+BT /F2 10.5 Tf 60 302 Td (IT Specialist - Spencer Gifts   \(June 2022 - Present\)) Tj ET
+BT /F1 10 Tf 60 288 Td (- Provide Tier 1-2 technical support across hardware, software, Windows OS, printers, VPN.) Tj ET
+BT /F1 10 Tf 60 274 Td (- Manage access and permissions via Active Directory; troubleshoot connectivity issues.) Tj ET
+BT /F1 10 Tf 60 260 Td (- Assist with system provisioning and configuration across on-premises and cloud.) Tj ET
+BT /F1 10 Tf 60 246 Td (- Monitor system logs, escalate incidents and support root cause analysis.) Tj ET
+BT /F1 10 Tf 60 232 Td (- Document troubleshooting procedures and share knowledge to reduce manual overhead.) Tj ET
+BT /F2 10.5 Tf 60 218 Td (Warehouse Associate - Ross Distribution Center   \(Sept 2016 - June 2019, Nov 2020 - June 2022\)) Tj ET
+BT /F1 10 Tf 60 204 Td (- Optimized product movement through problem-solving and workflow improvements.) Tj ET
+BT /F2 10.5 Tf 60 190 Td (Recreation Assistant - Mecklenburg County   \(June 2019 - Nov 2020\)) Tj ET
+BT /F1 10 Tf 60 176 Td (- Planned and led community activities; built team communication and collaboration.) Tj ET
+BT /F2 12.5 Tf 60 150 Td (EDUCATION) Tj ET
+BT /F2 10.5 Tf 60 136 Td (Olympic High School  \(High School Diploma, 2016\)) Tj ET
+
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000000348 00000 n 
+0000000450 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+4054
+%%EOF

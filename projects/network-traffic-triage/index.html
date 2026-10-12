@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Network Traffic Triage Tool</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="sample-data.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header><p class="eyebrow">OBSERVE · UNDERSTAND · INVESTIGATE</p><h1>Network Traffic Triage Tool</h1><p>Detection tells an analyst where to look. Investigation determines what actually happened.</p></header>
+<main id="main">
+  <aside class="notice"><strong>Private by design.</strong> Your packet capture data is analysed locally in your browser and is not uploaded anywhere.</aside>
+  <p>Educational network triage tool. Alerts indicate activity worth investigating and do not prove malicious behaviour. Only analyse traffic from systems and networks you own or are authorised to monitor.</p>
+  <section aria-labelledby="upload-title"><h2 id="upload-title">1. Load a packet list</h2>
+    <div id="drop-zone"><label for="file">Upload Wireshark CSV</label><input id="file" type="file" accept=".csv,text/csv"><p>Choose a file or drop one here. UTF-8 CSV only · maximum 10 MB / 50,000 packet rows · no PCAP support.</p></div>
+    <div class="buttons"><button id="normal">Load Normal Sample</button><button id="high">Load Suspicious Sample</button><button id="mixed">Load Mixed SOC Lab</button><button id="clear" class="secondary">Clear data</button></div>
+    <p>“Suspicious Sample” is fictional high-volume traffic, not a confirmed attack.</p>
+    <p id="status" role="status" aria-live="polite">No file loaded.</p><ul id="warnings"></ul>
+  </section>
+  <section aria-labelledby="settings-title"><h2 id="settings-title">2. Educational thresholds</h2><p>Thresholds should be adjusted based on the environment. A busy server may legitimately generate thousands of packets, while the same activity from another endpoint might deserve investigation.</p><p>Rules trigger only when counts are <strong>greater than</strong> these values. Counts cover the entire imported CSV, not a time window.</p>
+    <form id="settings"><div id="thresholds" class="grid"></div><div class="buttons"><button type="submit">Apply thresholds</button><button id="reset" type="button" class="secondary">Reset Defaults</button></div></form><p id="settings-status" role="status"></p>
+  </section>
+  <section id="results" hidden aria-labelledby="results-title"><h2 id="results-title">3. Capture overview</h2><div id="overview" class="grid"></div>
+    <div class="columns"><div><h3>Top source hosts</h3><div id="sources"></div></div><div><h3>Top destinations</h3><div id="destinations"></div></div><div><h3>Protocol distribution</h3><div id="protocols"></div></div></div>
+    <h3>Analysis coverage</h3><ul id="coverage"></ul>
+    <h3>Filter displayed results</h3><p>Overview and detections always use the full capture. Filters narrow the packet preview and alert list only. Protocol filtering shows alerts whose supporting packets include that protocol; severity applies only to alerts.</p>
+    <div class="grid"><label>Source address contains<input id="source-filter" type="search"></label><label>Destination address contains<input id="destination-filter" type="search"></label><label>Protocol<select id="protocol-filter"><option value="">All protocols</option></select></label><label>Alert severity<select id="severity-filter"><option value="">All severities</option><option>Informational</option><option>Low</option><option>Medium</option><option>High</option></select></label><label>Search packet fields / alert text<input id="search-filter" type="search"></label></div>
+    <h3>Activity worth investigating</h3><p>Priority is not certainty. An anomaly is a starting point for investigation, not proof of compromise.</p><p id="alert-count" role="status"></p><div id="alerts"></div>
+    <h3>Packet preview</h3><p id="packet-count"></p><div id="packets" class="table-scroll"></div>
+  </section>
+  <section><h2>How to Think Like an Analyst</h2><ol><li>Observe unusual behaviour.</li><li>Identify the source and destination.</li><li>Determine which protocol is involved.</li><li>Establish whether the activity is expected.</li><li>Look for supporting indicators.</li><li>Correlate with other security telemetry.</li><li>Decide whether further investigation is required.</li></ol><strong>An anomaly is a starting point for investigation, not proof of compromise.</strong></section>
+  <section><h2>From Wireshark to this tool</h2><ol><li>Open Wireshark.</li><li>Capture traffic only in an environment you own or are authorised to monitor.</li><li>Stop the capture.</li><li>Export the packet dissections / packet list as CSV, retaining the column headings. Check whether you are exporting all packets or only displayed packets.</li><li>Upload that CSV here.</li></ol><p>CSV is not a full capture. Encryption, NAT, missing fields, export filters, and Wireshark's protocol labels limit interpretation. This tool does not analyse malware or replace Wireshark, IDS, SIEM, or professional monitoring.</p><p>Keep real captures outside OneDrive or other synced folders if you require local-only file storage. The application cannot control operating-system or browser-extension behaviour.</p></section>
+</main><footer>Educational, explainable, offline. No attack probabilities. No remote enrichment.</footer>
+</body></html>

@@ -1,0 +1,69 @@
+// ===========================================================================
+// RESUME SOURCE FILE  -  edit the text below, then regenerate the PDF.
+//
+// HOW TO USE:
+//   1. Edit the lines below (change any text you like).
+//   2. Save this file.
+//   3. Open PowerShell in the portfolio folder and run:
+//          powershell -ExecutionPolicy Bypass -File build-resume.ps1
+//   4. assets\resume.pdf is rebuilt automatically.
+//
+// LINE FORMAT:   STYLE|Your text here
+//   TITLE|  = big bold heading (your name)
+//   SUB|    = bold subtitle
+//   META|   = small text (contact line)
+//   H|      = bold section heading
+//   B|      = bold body line
+//   T|      = normal body line
+//   (blank) = small vertical gap
+//
+// Lines starting with // are ignored (like this one).
+// Do NOT put your phone number, ID numbers or address here - this file is
+// published with the website.
+// ===========================================================================
+
+TITLE|JEREMY GIMENEZ
+SUB|IT Specialist | Aspiring Cybersecurity / SOC Analyst
+META|jeremy.gimenez7@gmail.com  |  linkedin.com/in/jeremy-gimenez-74589b134  |  github.com/jeremygimenez7
+
+H|SUMMARY
+T|IT Specialist with 3+ years of hands-on technical support, troubleshooting, and system
+T|administration experience seeking a cybersecurity / SOC role. Dedicated to delivering
+T|excellent customer service and supporting modern workplace technologies.
+
+H|CERTIFICATIONS
+T|CompTIA A+  (Earned)
+T|CompTIA Security+  (Earned)
+T|CompTIA CySA+  (Earned)
+
+H|TECHNICAL SKILLS
+T|Security Tools & Concepts: SIEM, SOAR, Log Analysis, Threat Detection, Incident Response
+T|Networking: DNS, DHCP, VPNs, Network Traffic Analysis
+T|Operating Systems: Linux (Ubuntu, CentOS, Debian), Windows
+T|Identity: Active Directory; access and permissions management
+T|Troubleshooting: Hardware/Software Diagnostics, Server Maintenance
+T|Languages: English, Spanish (fluent / bilingual)
+
+H|PROJECTS
+B|AI-Powered SOC & Security Monitoring Lab | Wazuh SIEM  (Home lab)
+T|Deployed Wazuh SIEM on an Ubuntu Server VM, enrolled a Windows endpoint, configured File
+T|Integrity Monitoring and reviewed alerts; combined it with an OpenAI-powered SOC analysis
+T|component to explore AI-assisted alert triage.
+B|CompTIA CySA+ Home Lab - Secure Browser & Threat Detection Simulation  (Home lab)
+T|Built a virtual machine lab to simulate and detect threats using open-source tools, basic
+T|SIEM functionality and log analysis.
+
+H|WORK EXPERIENCE
+B|IT Specialist - Spencer Gifts   (June 2022 - Present)
+T|- Provide Tier 1-2 technical support across hardware, software, Windows OS, printers, VPN.
+T|- Manage access and permissions via Active Directory; troubleshoot connectivity issues.
+T|- Assist with system provisioning and configuration across on-premises and cloud.
+T|- Monitor system logs, escalate incidents and support root cause analysis.
+T|- Document troubleshooting procedures and share knowledge to reduce manual overhead.
+B|Warehouse Associate - Ross Distribution Center   (Sept 2016 - June 2019, Nov 2020 - June 2022)
+T|- Optimized product movement through problem-solving and workflow improvements.
+B|Recreation Assistant - Mecklenburg County   (June 2019 - Nov 2020)
+T|- Planned and led community activities; built team communication and collaboration.
+
+H|EDUCATION
+B|Olympic High School  (High School Diploma, 2016)

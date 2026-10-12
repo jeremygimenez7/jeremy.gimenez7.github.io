@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  PROJECT CASE STUDY - AI-Powered SOC & Security Monitoring Lab (Wazuh SIEM)
+  projects/wazuh-soc-lab.html
+  ----------------------------------------------------------------------------
+  This page is the detailed write-up of the featured home lab project.
+  NOTE: this file lives in the /projects/ folder, so links to shared files start
+  with "../" (e.g. ../css/styles.css).
+  ============================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AI-Powered SOC &amp; Wazuh SIEM Home Lab | Jeremy Gimenez</title>
+  <meta name="description" content="A hands-on home lab case study: deploying a Wazuh SIEM manager on Ubuntu Server, enrolling a Windows endpoint, configuring File Integrity Monitoring and exploring AI-assisted SOC alert analysis.">
+  <meta name="author" content="Jeremy Gimenez">
+  <meta name="theme-color" content="#0a0e13">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI-Powered SOC &amp; Wazuh SIEM Home Lab | Jeremy Gimenez">
+  <meta property="og:description" content="Home lab case study: Wazuh SIEM deployment, Windows endpoint monitoring, File Integrity Monitoring and AI-assisted alert analysis.">
+  <meta property="og:image" content="../assets/favicon.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="../index.html">
+        <span class="mark" aria-hidden="true">JG</span>
+        <span class="who">
+          <span>Jeremy Gimenez</span>
+          <small>Cybersecurity Portfolio</small>
+        </span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links" id="primary-nav">
+          <li><a href="../index.html#about">About</a></li>
+          <li><a href="../index.html#projects">Projects</a></li>
+          <li><a href="../index.html#skills">Skills</a></li>
+          <li><a href="../index.html#certifications">Certifications</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap breadcrumb">
+      <a href="../index.html">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="../index.html#projects">Projects</a>
+      <span aria-hidden="true">/</span>
+      <span>AI-Powered SOC &amp; Wazuh SIEM Home Lab</span>
+    </div>
+
+    <!-- ======================================================================
+         PROJECT HERO
+         ====================================================================== -->
+    <section class="project-hero">
+      <div class="wrap">
+        <span class="badge badge-domain">Home lab · SOC / Security Operations</span>
+        <h1>AI-Powered SOC &amp; Security Monitoring Lab | Wazuh SIEM</h1>
+        <p class="lede">
+          A virtualised Security Operations Centre lab built to practise real
+          monitoring work: centralised log collection, endpoint visibility, File
+          Integrity Monitoring and alert investigation — with an OpenAI-powered
+          component that explores how artificial intelligence can support alert
+          triage in a SOC workflow.
+        </p>
+        <div class="badges" aria-label="Technologies used">
+          <span class="badge">Wazuh SIEM</span>
+          <span class="badge">Ubuntu Server</span>
+          <span class="badge">Windows</span>
+          <span class="badge">Oracle VirtualBox</span>
+          <span class="badge">File Integrity Monitoring</span>
+          <span class="badge badge-accent">OpenAI-powered analysis</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-ghost btn-sm" href="../index.html#projects">← All projects</a>
+          <a class="btn btn-ghost btn-sm" href="https://github.com/jeremygimenez7" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+        </div>
+
+        <!-- REPOSITORY STATUS: the code repository for this lab does not exist yet.
+             When it is created, replace the paragraph below with a real link, e.g.
+             <a href="https://github.com/jeremygimenez7/wazuh-ai-soc-homelab" target="_blank" rel="noopener noreferrer">github.com/jeremygimenez7/wazuh-ai-soc-homelab</a>
+             Do not link to it until the repository is actually published. -->
+        <p class="meta-line" style="margin-top:1rem;">
+          <strong>Repository:</strong> I am preparing a dedicated repository named
+          <code>wazuh-ai-soc-homelab</code> for this project. It has not been published yet, so no
+          link is shown here — it will be added once it exists.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         1. PROJECT OVERVIEW
+         ====================================================================== -->
+    <section id="overview">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">01 · Overview</span>
+          <h2>Project overview</h2>
+        </div>
+
+        <div class="callout">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>This is a home lab.</strong> Everything on this page was built and tested in my own virtualised environment for learning purposes. It is not production or enterprise work, and no real-world attack data or company systems are involved.</p>
+        </div>
+
+        <div class="prose">
+          <p>
+            Security Operations Centres rely on being able to see what is happening
+            across the systems they protect. The goal of this lab was to build that
+            kind of visibility on a small scale so I could practise the day-to-day
+            work of monitoring, investigating and understanding security events.
+          </p>
+          <p>
+            I deployed a Wazuh SIEM platform on an Ubuntu Server virtual machine,
+            connected a Windows endpoint to it, configured File Integrity Monitoring
+            to watch a directory I controlled, generated test events, and reviewed
+            the resulting alerts in the Wazuh dashboard. I then extended the lab with
+            an OpenAI-powered analysis component to explore how artificial
+            intelligence can support the interpretation of alerts during an
+            investigation.
+          </p>
+          <h3>Objectives</h3>
+          <ul>
+            <li>Deploy and configure a working SIEM platform in a controlled lab.</li>
+            <li>Gain centralised visibility of events from a Windows endpoint.</li>
+            <li>Implement File Integrity Monitoring and generate my own detection events.</li>
+            <li>Practise reading, triaging and understanding security alerts.</li>
+            <li>Explore how OpenAI can assist a SOC analyst during alert analysis.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         2. LAB ARCHITECTURE
+         The diagram is a separate file: assets/wazuh-architecture.svg
+         To replace it with your own image, overwrite that file (or change the
+         src below) and update the alt text to describe your diagram.
+         ====================================================================== -->
+    <section id="architecture">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">02 · Architecture</span>
+          <h2>Lab architecture</h2>
+          <p>How the pieces of the lab fit together and how events flow from the endpoint to analysis.</p>
+        </div>
+
+        <figure class="arch-figure">
+          <img src="../assets/wazuh-architecture.svg"
+               alt="Lab architecture diagram: a Windows endpoint running the Wazuh Agent sends security events to a Wazuh Manager hosted on an Ubuntu Server virtual machine inside Oracle VirtualBox. The Wazuh Manager feeds the Wazuh Dashboard, where alerts are reviewed and fed into an AI-assisted SOC analysis workflow.">
+        </figure>
+        <p class="arch-caption">
+          Windows Endpoint → Wazuh Agent → Wazuh Manager (Ubuntu Server VM) → Wazuh Dashboard → Security alert analysis → OpenAI-powered SOC analysis
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. TECHNOLOGIES USED
+         ====================================================================== -->
+    <section id="technologies">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">03 · Technologies</span>
+          <h2>Technologies used</h2>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>Platforms &amp; systems</h3>
+            <div class="badges">
+              <span class="badge">Wazuh SIEM</span>
+              <span class="badge">Wazuh Agent</span>
+              <span class="badge">Ubuntu Server</span>
+              <span class="badge">Windows</span>
+              <span class="badge">Oracle VirtualBox</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>AI &amp; automation</h3>
+            <div class="badges">
+              <span class="badge">OpenAI</span>
+              <span class="badge">AI-Assisted SOC Analysis</span>
+              <span class="badge">Alert Triage Support</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Concepts &amp; capabilities</h3>
+            <div class="badges">
+              <span class="badge">SIEM</span>
+              <span class="badge">File Integrity Monitoring</span>
+              <span class="badge">Security Event Monitoring</span>
+              <span class="badge">Log Collection &amp; Analysis</span>
+              <span class="badge">Virtualisation &amp; Networking</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="meta-line" style="margin-top:1.2rem;">
+          <strong>Configuration note:</strong> endpoint monitoring was configured by editing the
+          Wazuh agent's <code>ossec.conf</code> file to add the directories to be monitored.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. IMPLEMENTATION & CONFIGURATION
+         Each .phase card is one stage of the build.
+         ====================================================================== -->
+    <section id="implementation">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">04 · Implementation</span>
+          <h2>Implementation &amp; configuration</h2>
+          <p>What I built, in the order I built it.</p>
+        </div>
+
+        <div class="grid grid-2">
+
+          <div class="phase">
+            <span class="phase-num" aria-hidden="true">1</span>
+            <h3>SIEM infrastructure deployment</h3>
+            <ul>
+              <li>Created an Ubuntu Server virtual machine using Oracle VirtualBox.</li>
+              <li>Installed and configured the Wazuh security monitoring platform.</li>
+              <li>Established a centralised environment for collecting and reviewing endpoint security events.</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <span class="phase-num" aria-hidden="true">2</span>
+            <h3>Windows endpoint integration</h3>
+            <ul>
+              <li>Installed the Wazuh Agent on a Windows host machine.</li>
+              <li>Connected the endpoint to the Wazuh Manager.</li>
+              <li>Verified agent communication and confirmed centralised endpoint monitoring.</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <span class="phase-num" aria-hidden="true">3</span>
+            <h3>File Integrity Monitoring</h3>
+            <ul>
+              <li>Edited the Wazuh agent's <code>ossec.conf</code> configuration to monitor a custom Windows directory.</li>
+              <li>Created and modified test files to generate security events.</li>
+              <li>Confirmed that Wazuh detected and reported the file integrity changes.</li>
+              <li>Reviewed the resulting alerts through the Wazuh dashboard.</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <span class="phase-num" aria-hidden="true">4</span>
+            <h3>OpenAI-powered SOC analysis</h3>
+            <ul>
+              <li>Expanded the lab with an OpenAI-powered security operations component.</li>
+              <li>Explored how OpenAI can support security alert interpretation and SOC investigation workflows.</li>
+              <li>Integrated the AI-assisted analysis into the broader Wazuh monitoring project.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. SECURITY MONITORING & DETECTION
+         ====================================================================== -->
+    <section id="detection">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">05 · Detection</span>
+          <h2>Security monitoring &amp; detection</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            With the endpoint enrolled, the lab gave a single place to observe
+            activity from the monitored Windows host. To test detection rather than
+            just installation, I used File Integrity Monitoring — a Wazuh capability
+            that watches chosen files and directories and raises an alert when they
+            are changed.
+          </p>
+          <h3>What I tested</h3>
+          <ul>
+            <li>Pointed the agent's FIM configuration at a custom directory under my control.</li>
+            <li>Created new files in that directory and then modified them.</li>
+            <li>Observed Wazuh detect each change and raise a corresponding alert.</li>
+            <li>Opened each alert in the dashboard to review what changed, when, and on which endpoint.</li>
+          </ul>
+          <h3>Why it mattered</h3>
+          <p>
+            File Integrity Monitoring is a practical example of how defenders detect
+            unwanted change — for instance, an attacker or a piece of malware altering
+            configuration files. By generating the events myself and then reading the
+            resulting alerts, I practised the core SOC loop: something happens → the
+            tool detects it → the analyst investigates and decides what it means.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         6. AI-ASSISTED SOC FUNCTIONALITY (OpenAI)
+         CONFIRMED: the AI service used in this lab is OpenAI.
+         NOT CONFIRMED (deliberately left as placeholders): the exact OpenAI model,
+         how the API integration is implemented, and whether any automated response
+         is performed. Do not state these until they are verified.
+         ====================================================================== -->
+    <section id="ai-soc">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">06 · AI-assisted SOC</span>
+          <h2>AI-assisted SOC functionality (OpenAI)</h2>
+          <p>Combining Wazuh SIEM security monitoring with an OpenAI-powered SOC analysis component.</p>
+        </div>
+
+        <div class="prose">
+          <p>
+            This is an <strong>AI-assisted cybersecurity project</strong>. Security teams
+            routinely receive more alerts than they can review manually, so this part of the
+            lab explored how <strong>OpenAI</strong> can support the analyst rather than replace
+            them — using it as an assistant to help interpret what an alert means and to suggest
+            plausible next steps for investigation.
+          </p>
+          <ul>
+            <li>Combined Wazuh SIEM security monitoring with an OpenAI-powered SOC analysis component.</li>
+            <li>Used OpenAI to help explain Wazuh alerts in plain language and summarise the supporting detail.</li>
+            <li>Used it to suggest investigation questions and plausible next steps for triage.</li>
+            <li>Kept a human decision in the loop — the AI supports triage; it does not make the final call.</li>
+          </ul>
+          <p>
+            Adding AI here was not novelty for its own sake. It reflects a genuine interest in how
+            artificial intelligence is being applied to security operations, and in learning where
+            it genuinely helps an analyst and where human judgement is still required.
+          </p>
+        </div>
+
+        <div class="callout warn">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg>
+          <p><strong>Still to confirm.</strong> OpenAI is confirmed as the AI service used in this
+          lab, but the following technical details are deliberately <em>not</em> stated here because
+          they have not been verified: the specific OpenAI <code>[ MODEL — TO BE ADDED ]</code>, the
+          exact <code>[ API IMPLEMENTATION / INTEGRATION — TO BE ADDED ]</code>, and whether the
+          workflow performs any <code>[ AUTOMATED RESPONSE — NONE CONFIRMED ]</code>. No performance
+          metrics, detection statistics or automation claims are made anywhere on this page.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         7. CHALLENGES & LESSONS LEARNED
+         Based on what Jeremy confirmed: deploying Wazuh on Ubuntu Server through
+         VirtualBox, integrating a Windows endpoint, configuring and testing File
+         Integrity Monitoring, exploring OpenAI-assisted security analysis, and
+         evaluating hardware limitations when planning additional virtual machines.
+         Add named, specific incidents here as they are recorded.
+         ====================================================================== -->
+    <section id="challenges">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">07 · Challenges &amp; lessons</span>
+          <h2>Challenges &amp; lessons learned</h2>
+          <p>The practical experience this lab gave me, and what I took away from it.</p>
+        </div>
+
+        <div class="callout">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p>Everything below describes work I actually did in my own virtualised lab. Where a
+          detail has not been recorded, it is left out rather than filled in with a guess.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>What I worked through</h3>
+            <ul class="check-list">
+              <li><strong>Deploying Wazuh on Ubuntu Server through VirtualBox</strong> — building the Linux server virtual machine and getting the Wazuh platform running inside it.</li>
+              <li><strong>Integrating a Windows endpoint</strong> — installing the Wazuh Agent on a Windows host and getting it to communicate with and report to the Wazuh Manager.</li>
+              <li><strong>Configuring and testing File Integrity Monitoring</strong> — pointing Wazuh at a directory I controlled and generating real alerts by changing files in it.</li>
+              <li><strong>Exploring OpenAI-assisted security analysis</strong> — adding an OpenAI-powered component to help interpret alerts and support SOC-style analysis.</li>
+              <li><strong>Evaluating hardware limitations</strong> — assessing what my machine could realistically run when planning additional virtual machines for the lab.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>What I learned</h3>
+            <ul class="check-list">
+              <li>A SIEM is only as useful as the data reaching it — endpoint integration and log collection have to be right before analysis means anything.</li>
+              <li>Detection becomes much more tangible when you generate the events yourself and then read the resulting alerts, rather than just reading about it.</li>
+              <li>AI is genuinely useful for interpreting and summarising alerts, but it needs a human to validate the output and make the final call.</li>
+              <li>Lab planning is a resource problem: hardware limits decide how many virtual machines — and which attack simulations — are actually realistic.</li>
+              <li>Multi-VM labs involve a lot of networking, configuration and troubleshooting before anything works end to end.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="meta-line" style="margin-top:1.4rem;">
+          <strong>Still to document:</strong> named, specific problems encountered (for example an
+          exact agent connectivity or configuration error) and how each one was resolved. These will
+          be added here as I record them.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         8. SCREENSHOTS & EVIDENCE
+         These are real captures from my own lab, not placeholders. Each one was
+         redacted before it was added: IP addresses, hostnames, computer names,
+         account names and manager names are blacked out.
+         HOW TO ADD MORE SCREENSHOTS:
+           1. Save the REDACTED image into  assets/screenshots/_incoming/  and give
+              it a file name add-screenshots.ps1 can match to a slot (the slot words
+              are listed at the top of that script).
+           2. Run  add-screenshots.ps1  - it resizes the image, writes shot-*.jpg
+              and repoints this page automatically.
+           3. Update the alt text and the caption below to describe what is shown.
+           4. REDACT FIRST, ALWAYS. Once an image is on a public site it can be
+              copied and archived forever.
+         ====================================================================== -->
+    <section id="screenshots">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">08 · Screenshots</span>
+          <h2>Screenshots &amp; evidence</h2>
+          <p>Click any image to view it enlarged. Every frame below is a real capture from my own lab, redacted before publishing.</p>
+        </div>
+
+        <div class="callout">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6l7-3z"/></svg>
+          <p><strong>Privacy note.</strong> Any sensitive information visible in these screenshots —
+          IP addresses, hostnames, account names, Windows Security IDs and similar — is redacted
+          before publishing. Nothing identifying from my own home network or accounts is shown.</p>
+        </div>
+
+        <div class="gallery">
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-wazuh-dashboard.jpg"
+                    data-caption="Wazuh SIEM Dashboard — the Overview module showing the enrolled agent, 24-hour alert totals by severity, and the detection modules in use.">
+              <img src="../assets/screenshots/shot-wazuh-dashboard.jpg" alt="Wazuh Overview module showing one active agent, 24-hour alert totals broken down by severity, and the Endpoint Security, Threat Intelligence, Security Operations and Cloud Security module tiles.">
+            </button>
+            <figcaption>
+              <strong>Wazuh SIEM Dashboard</strong>
+              The Wazuh Overview module. One agent is enrolled and reporting, and the 24-hour
+              panel breaks the 2,326 collected alerts down by severity — all Medium and Low,
+              which is what a quiet home lab normally looks like.
+            </figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-windows-endpoint.jpg"
+                    data-caption="Windows Endpoint Security Event — a Windows Security event collected from the Windows 11 endpoint and decoded by Wazuh into rule 60227 at level 8.">
+              <img src="../assets/screenshots/shot-windows-endpoint.jpg" alt="Wazuh Discover view of a Windows Security event (Event ID 6416) decoded into Wazuh rule 60227 at level 8 and mapped to MITRE ATT&amp;CK technique T1092; the account name and manager name are redacted.">
+            </button>
+            <figcaption>
+              <strong>Windows Endpoint Security Event</strong>
+              The other half of the lab. A Windows Security event was collected from the
+              Windows 11 endpoint by the Wazuh Agent, decoded into rule 60227 (level 8) and
+              mapped to MITRE ATT&amp;CK T1092. Account name and manager name are redacted.
+            </figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-fim-events.jpg"
+                    data-caption="File Integrity Monitoring — the FIM events view filtered to the syscheck rule group, showing the test file changes that raised alerts.">
+              <img src="../assets/screenshots/shot-fim-events.jpg" alt="Wazuh File Integrity Monitoring events view filtered to the syscheck rule group, listing four test file changes with rules 553 and 554; the agent name and part of the file path are redacted.">
+            </button>
+            <figcaption>
+              <strong>File Integrity Monitoring — Events</strong>
+              The FIM events view, filtered to <code>rule.groups: syscheck</code>. Four file
+              changes were detected in the monitored test folder and raised rule 553 (level 7)
+              for deletions and rule 554 (level 5) for additions. Agent name and part of the
+              path are redacted.
+            </figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-fim-alert-detail.jpg"
+                    data-caption="FIM alert detail — the full decoded alert behind a rule 553 detection, including its hash values and MITRE ATT&amp;CK mapping.">
+              <img src="../assets/screenshots/shot-fim-alert-detail.jpg" alt="Wazuh document details for a rule 553 file deleted alert, showing the decoder, rule level 7, MITRE ATT&amp;CK techniques T1070.004 and T1485, and the MD5 and SHA-256 hashes; agent IP, agent name and manager name are redacted.">
+            </button>
+            <figcaption>
+              <strong>FIM Alert Detail</strong>
+              Drilling into a single detection. Rule 553 (level 7) fired when a test file was
+              deleted, and Wazuh mapped it to MITRE ATT&amp;CK T1070.004 (File Deletion) and
+              T1485 (Data Destruction). The MD5 and SHA-256 hashes of the file are recorded
+              alongside the rule, which is the evidence an investigation would work from.
+              Agent IP, agent name and manager name are redacted.
+            </figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-ubuntu-wazuh-install.jpg"
+                    data-caption="Ubuntu Server &amp; Wazuh Installation — the Linux server hosting the Wazuh platform.">
+              <img src="../assets/screenshots/shot-ubuntu-wazuh-install.jpg" alt="Ubuntu Server terminal running systemctl status for the wazuh-manager service, showing the unit loaded and active (running).">
+            </button>
+            <figcaption>
+              <strong>Ubuntu Server &amp; Wazuh Installation</strong>
+              The Ubuntu Server virtual machine where the Wazuh platform was installed and
+              managed through the terminal.
+            </figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-ai-soc-workflow.jpg"
+                    data-caption="AI-Assisted SOC Workflow — the end-to-end pipeline from endpoint detection to AI-written report.">
+              <img src="../assets/screenshots/shot-ai-soc-workflow.jpg" alt="Diagram of an eight-stage SOC pipeline: Windows 11 endpoint, Wazuh Agent, Wazuh Manager SIEM, alerts.json, Python SOC automation, OpenAI API, AI-assisted SOC triage, then outputs covering the secure report, the checkpoint and continuous monitoring.">
+            </button>
+            <figcaption>
+              <strong>AI-Assisted SOC Workflow</strong>
+              The full pipeline I built. Wazuh writes alerts to <code>alerts.json</code>; a
+              Python component reads new alerts, de-duplicates them against a checkpoint and
+              filters to level 7 and above; the OpenAI API returns a structured triage; the
+              report is written out and the checkpoint advances so the same alert is never
+              analysed twice.
+            </figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-openai-soc.jpg"
+                    data-caption="AI-assisted triage report — the pipeline's analysis of a real Wazuh alert, written to the terminal.">
+              <img src="../assets/screenshots/shot-openai-soc.jpg" alt="Terminal output of an AI SOC triage report for Wazuh rule 60227, showing classification, risk score, MITRE ATT&amp;CK assessment, observed facts, missing telemetry, recommended investigation and remediation, and an escalation decision; agent name and IP are redacted.">
+            </button>
+            <figcaption>
+              <strong>AI-Assisted SOC Triage Report</strong>
+              A report the pipeline produced for a real alert (rule 60227, level 8). Rather
+              than restating the alert, it classifies the event, scores the risk, lists the
+              telemetry that would be needed to confirm it, and pushes back on Wazuh's own
+              MITRE ATT&amp;CK mapping because the event does not actually support it.
+              Agent name and IP are redacted.
+            </figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button type="button" class="thumb"
+                    data-full="../assets/screenshots/shot-secure-reports.jpg"
+                    data-caption="Secure report handling — generated reports are written with owner read/write permissions only.">
+              <img src="../assets/screenshots/shot-secure-reports.jpg" alt="Terminal listing of generated SOC report files showing rw------- permissions, meaning owner read and write only; the username and group columns are redacted.">
+            </button>
+            <figcaption>
+              <strong>Secure AI SOC Report Handling</strong>
+              The reports contain full alert detail, so the pipeline writes them with
+              <code>rw-------</code> permissions — owner read and write only, with no group or
+              world access. Username and group are redacted.
+            </figcaption>
+          </figure>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         9. PLANNED IMPROVEMENTS
+         These are NOT completed — they are future work. Keep this clearly
+         separated from the completed implementation above.
+         ====================================================================== -->
+    <section id="planned">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">09 · Planned improvements</span>
+          <h2>Planned improvements</h2>
+        </div>
+
+        <div class="callout warn">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg>
+          <p><strong>Not yet done.</strong> Everything below is planned future work. None of it has
+          been implemented yet, and it is listed here so the difference between what I have built
+          and what I intend to build is clear.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Completed so far</h3>
+            <ul class="check-list">
+              <li>Wazuh SIEM deployed on an Ubuntu Server virtual machine.</li>
+              <li>Windows endpoint enrolled and monitored by the agent.</li>
+              <li>File Integrity Monitoring configured and test alerts generated.</li>
+              <li>Alerts reviewed and investigated in the Wazuh dashboard.</li>
+              <li>OpenAI-powered alert analysis added and explored as a SOC workflow component.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Planned next</h3>
+            <ul class="plan-list">
+              <li>Deploy a Kali Linux attacker machine as the offensive side of the lab.</li>
+              <li>Run controlled attack simulations inside the isolated lab network.</li>
+              <li>Work through additional alert investigation scenarios using the alerts those simulations generate.</li>
+              <li>Continue developing the AI-assisted SOC workflow built on OpenAI.</li>
+              <li>Map detected activity to MITRE ATT&amp;CK techniques.</li>
+              <li>Grow the lab further within the hardware limits identified during this build.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; <span id="year">2026</span> Jeremy Gimenez. Built as a static site with HTML, CSS and vanilla JavaScript.</p>
+      <nav aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects">All projects</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Lightbox used by the screenshot gallery (opened by js/script.js) -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged screenshot" aria-hidden="true">
+    <button type="button" class="lightbox-close">Close</button>
+    <img src="" alt="">
+    <p class="lightbox-caption"></p>
+  </div>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>
+
+
+
+
+
+

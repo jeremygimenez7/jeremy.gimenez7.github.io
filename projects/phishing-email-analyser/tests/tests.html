@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Self-tests &mdash; Phishing Email Analyser</title>
+<meta name="robots" content="noindex" />
+<link rel="stylesheet" href="../css/styles.css" />
+<style>
+  .test-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .test-table th, .test-table td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); }
+  .test-table th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .ok { color: var(--low); font-weight: 700; }
+  .bad { color: var(--high); font-weight: 700; }
+  .banner { border-radius: var(--radius-sm); padding: 0.8rem 1rem; font-weight: 650; margin-bottom: 1rem; }
+  .banner.pass { background: rgba(46,204,143,0.12); border: 1px solid rgba(46,204,143,0.4); color: var(--low); }
+  .banner.fail { background: rgba(255,95,95,0.12); border: 1px solid rgba(255,95,95,0.4); color: var(--high); }
+  .detail { color: var(--muted); font-family: var(--mono); font-size: 0.75rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <div class="brand-text">
+        <h1>Self-tests</h1>
+        <p class="tagline">Regression checks for the analysis engine</p>
+      </div>
+    </div>
+    <p class="privacy-pill"><span class="dot" aria-hidden="true"></span>Runs offline</p>
+  </div>
+</header>
+
+<main class="wrap" style="padding-top:1.25rem; padding-bottom:2rem;">
+  <div id="summary"></div>
+  <section class="panel">
+    <div class="panel-head"><h2>Results</h2><span class="hint" id="counts"></span></div>
+    <div class="table-scroll"><div id="output">Running&hellip;</div></div>
+  </section>
+  <p style="margin-top:1rem;"><a href="../index.html">&larr; Back to the analyser</a></p>
+</main>
+
+<script src="../js/rules.js"></script>
+<script src="../js/headers.js"></script>
+<script src="../js/analyser.js"></script>
+<script src="../js/samples.js"></script>
+<script src="../js/selftest.js"></script>
+<script>
+(function () {
+  'use strict';
+  var summary = window.PA.runSelfTest();
+
+  var banner = document.createElement('div');
+  banner.className = 'banner ' + (summary.ok ? 'pass' : 'fail');
+  banner.textContent = summary.ok
+    ? 'ALL ' + summary.total + ' TESTS PASSED'
+    : summary.failed + ' of ' + summary.total + ' TESTS FAILED';
+  document.getElementById('summary').appendChild(banner);
+
+  document.getElementById('counts').textContent =
+    summary.passed + ' passed / ' + summary.failed + ' failed';
+
+  var table = document.createElement('table');
+  table.className = 'test-table';
+  var thead = document.createElement('thead');
+  var hr = document.createElement('tr');
+  ['', 'Test', 'Detail'].forEach(function (label) {
+    var th = document.createElement('th');
+    th.textContent = label;
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  table.appendChild(thead);
+
+  var tbody = document.createElement('tbody');
+  summary.results.forEach(function (item) {
+    var tr = document.createElement('tr');
+    var status = document.createElement('td');
+    status.className = item.pass ? 'ok' : 'bad';
+    status.textContent = item.pass ? 'PASS' : 'FAIL';
+    var name = document.createElement('td');
+    name.textContent = item.name;
+    var detail = document.createElement('td');
+    detail.className = 'detail';
+    detail.textContent = item.pass ? '' : item.detail;
+    tr.appendChild(status);
+    tr.appendChild(name);
+    tr.appendChild(detail);
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  var output = document.getElementById('output');
+  output.innerHTML = '';
+  output.appendChild(table);
+})();
+</script>
+</body>
+</html>

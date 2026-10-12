@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Phishing Email Analyser &mdash; private, local triage</title>
+<meta name="description" content="An educational, privacy-first phishing email analyser. Paste a suspicious email and get an explainable risk score. All analysis happens locally in your browser." />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%2338e0c8' d='M16 2 4 7v9c0 7 5 12.5 12 14 7-1.5 12-7 12-14V7z'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<a class="skip-link" href="#input-panel">Skip to the analyser</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M16 2 4 7v9c0 7 5 12.5 12 14 7-1.5 12-7 12-14V7z"></path>
+        <path class="brand-mark-tick" d="M14.6 20.4 9.9 15.7l1.9-1.9 2.8 2.8 6-6 1.9 1.9z"></path>
+      </svg>
+      <div class="brand-text">
+        <h1>Phishing Email Analyser</h1>
+        <p class="tagline">Explainable, offline triage for suspicious email</p>
+      </div>
+    </div>
+    <p class="privacy-pill" title="No network requests are made. Open your browser's Network tab to verify.">
+      <span class="dot" aria-hidden="true"></span>
+      100&nbsp;% in your browser
+    </p>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <!-- ===================== PRIVACY NOTICE ===================== -->
+  <section class="privacy-notice" aria-labelledby="privacy-heading">
+    <h2 id="privacy-heading" class="privacy-notice-title">Your email never leaves this page</h2>
+    <p>
+      Everything you paste here is analysed by JavaScript running inside your own browser. There is no
+      server, no database, no account, no AI service, no API key and no analytics. The email text is never
+      uploaded, stored or transmitted &mdash; there is nowhere for it to go. Once the page has loaded you can
+      switch off your internet connection and the analyser will keep working.
+    </p>
+  </section>
+
+  <div class="layout">
+
+    <!-- ===================== INPUT ===================== -->
+    <section class="panel input-panel" id="input-panel" aria-labelledby="input-heading">
+      <div class="panel-head">
+        <h2 id="input-heading">1. Paste the suspicious email</h2>
+        <span class="hint">Nothing is sent anywhere</span>
+      </div>
+
+      <label class="field-label" for="email-body">Email subject &amp; body</label>
+      <textarea id="email-body" class="input-area" rows="14" spellcheck="false"
+        placeholder="Paste the full email here, including the subject line and any link text.&#10;&#10;Example:&#10;Subject: Urgent: your account will be closed&#10;&#10;Dear Customer, we have detected unusual activity..."></textarea>
+
+      <div class="input-meta">
+        <span id="char-count">0 characters</span>
+        <span class="dot-sep" aria-hidden="true">&bull;</span>
+        <span id="url-count">0 links found</span>
+      </div>
+
+      <details class="advanced" id="advanced-headers">
+        <summary>
+          <span class="advanced-title">Advanced (optional): paste raw email headers</span>
+          <span class="advanced-sub">Unlocks SPF / DKIM / DMARC and Reply-To checks</span>
+        </summary>
+        <div class="advanced-body">
+          <p class="field-help">
+            In your email client choose <em>Show original</em>, <em>View source</em> or <em>Show message
+            headers</em>, then copy everything above the first blank line. This is entirely optional &mdash;
+            the body-only analysis is useful on its own.
+          </p>
+          <label class="field-label" for="email-headers">Raw headers</label>
+          <textarea id="email-headers" class="input-area input-area-sm" rows="8" spellcheck="false"
+            placeholder="From: &quot;Example Brand&quot; &lt;no-reply@mail.example.com&gt;&#10;Reply-To: someone@example.net&#10;Authentication-Results: mx.example.com; spf=fail smtp.mailfrom=example.com"></textarea>
+        </div>
+      </details>
+
+      <div class="samples">
+        <h3 class="samples-title">Try a fictional example</h3>
+        <p class="field-help">
+          Made-up teaching examples. No real company domains and no working links.
+        </p>
+        <div class="sample-buttons" id="sample-buttons"></div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="analyse-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.5 3a7.5 7.5 0 1 0 4.55 13.46l4.24 4.25 1.42-1.42-4.25-4.24A7.5 7.5 0 0 0 10.5 3zm0 2a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11z"></path></svg>
+          Analyse Email
+        </button>
+        <button type="button" class="btn btn-ghost" id="clear-btn">Clear</button>
+        <span class="form-message" id="form-message" role="status"></span>
+      </div>
+    </section>
+
+  <!-- ===================== RESULTS ===================== -->
+    <section class="panel results-panel" id="results" aria-labelledby="results-heading" aria-live="polite">
+      <div class="panel-head">
+        <h2 id="results-heading">2. Result</h2>
+        <span class="hint" id="rules-count"></span>
+      </div>
+
+      <div class="empty-state" id="empty-state">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="empty-icon">
+          <path d="M12 2 3 6v6c0 5.25 3.75 9.9 9 11 5.25-1.1 9-5.75 9-11V6z"/>
+        </svg>
+        <p><strong>No analysis yet.</strong></p>
+        <p>Paste an email on the left (or load an example) and select <em>Analyse Email</em>. Every warning
+          sign, the points it contributed and the reason for it will be listed here.</p>
+      </div>
+
+      <div class="result-body" id="result-body" hidden></div>
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>
+      Phishing Email Analyser &mdash; a static, dependency-free teaching tool.
+      No data collection, no cookies, no third-party requests.
+    </p>
+    <p class="footer-small">
+      Designed for learning. Not a substitute for professional security advice or your organisation's
+      reporting process.
+    </p>
+  </div>
+</footer>
+
+<script src="js/rules.js"></script>
+<script src="js/headers.js"></script>
+<script src="js/analyser.js"></script>
+<script src="js/samples.js"></script>
+<script src="js/selftest.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

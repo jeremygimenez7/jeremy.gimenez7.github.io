@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows Security Event Log Triage Tool</title>
+<meta name="description" content="Educational SOC-style triage tool for Windows Event Viewer CSV exports. All analysis runs locally in your browser; files are never uploaded.">
+<!--
+  Windows Security Event Log Triage Tool
+  Static, offline, dependency-free: HTML + CSS + vanilla JavaScript.
+  No CDN assets, no network fonts, no analytics, no telemetry.
+  See README.md for the privacy architecture and how to verify it.
+-->
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">WEL</span>
+      <div class="brand-text">
+        <h1 class="brand-title">Windows Security Event Log Triage Tool</h1>
+        <p class="brand-sub">An educational SOC-style triage companion for Windows Event Viewer CSV exports</p>
+      </div>
+    </div>
+    <p class="privacy-banner" role="note">
+      <strong>Privacy:</strong> Your Windows security logs are analysed locally in your browser.
+      Files are not uploaded or transmitted anywhere.
+    </p>
+  </div>
+</header>
+
+<nav class="site-nav" aria-label="Page sections">
+  <div class="wrap nav-inner">
+    <ul class="nav-list">
+      <li><a href="#upload">1. Upload logs</a></li>
+      <li><a href="#settings">2. Thresholds</a></li>
+      <li><a href="#report">3. Triage report</a></li>
+      <li><a href="#education">4. Learn</a></li>
+      <li><a href="#disclaimer">5. Disclaimer</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main" class="wrap">
+
+  <!-- ============================ 1. UPLOAD ============================ -->
+  <section id="upload" class="panel" aria-labelledby="upload-heading">
+    <h2 id="upload-heading" class="panel-title">1. Upload a Windows event log export</h2>
+
+    <p class="lede">
+      Export security-relevant events from Windows Event Viewer as a <strong>CSV</strong> file, then load that
+      file here. Everything is parsed in this browser tab. Nothing is uploaded, stored, or sent to any
+      server, AI provider, or analytics platform.
+    </p>
+
+    <div class="dropzone" id="drop-zone" role="button" tabindex="0" aria-describedby="drop-help">
+      <span class="dropzone-icon" aria-hidden="true">&#8682;</span>
+      <span class="dropzone-title">Drag and drop your CSV here</span>
+      <span class="dropzone-sub" id="drop-help">or press Enter / Space to choose a file</span>
+    </div>
+
+    <div class="form-row">
+      <label class="field-label" for="file-input">Choose a CSV file</label>
+      <input type="file" id="file-input" accept=".csv,.txt,.log,text/csv,text/plain"
+             aria-describedby="file-input-help">
+      <p class="field-help" id="file-input-help">
+        Accepted: comma-, semicolon- or tab-separated text exports that contain an Event ID column.
+      </p>
+    </div>
+
+    <div class="status-area">
+      <p class="file-meta" id="file-meta" hidden></p>
+      <div id="parse-status" role="status" aria-live="polite" class="status status-info" hidden></div>
+      <div id="parse-error" role="alert" class="status status-error" hidden></div>
+      <ul id="parse-warnings" class="warning-list" hidden></ul>
+    </div>
+
+    <div class="samples">
+      <h3 class="samples-title">Demo Data &mdash; fictional sample datasets</h3>
+      <p class="field-help">
+        These are <strong>Demo Data</strong>. They contain fictional usernames, computer names and
+        reserved or private IP addresses. No real people or organisations are represented.
+      </p>
+      <div class="sample-buttons" role="group" aria-label="Load a demo dataset">
+        <button type="button" class="btn btn-sample" id="sample-normal">
+          Load Normal Sample<span class="btn-note">expected: mostly informational</span>
+        </button>
+        <button type="button" class="btn btn-sample" id="sample-password">
+          Load Password Guessing Sample<span class="btn-note">expected: repeated failures then success</span>
+        </button>
+        <button type="button" class="btn btn-sample" id="sample-persistence">
+          Load Privilege Escalation Sample<span class="btn-note">expected: new account granted privileges</span>
+        </button>
+        <button type="button" class="btn btn-sample" id="sample-mixed">
+          Load Mixed SOC Sample<span class="btn-note">expected: several correlated findings</span>
+        </button>
+      </div>
+      <p class="field-help">
+        The same fictional data also exists as real files in the <code>samples/</code> folder, so you can
+        practise the upload and drag-and-drop path by hand.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================ 3. REPORT ============================ -->
+  <section id="report" class="panel" aria-labelledby="report-heading" hidden>
+    <h2 id="report-heading" class="panel-title">3. Triage report</h2>
+    <p class="report-meta" id="report-meta"></p>
+
+    <p class="finding-note" role="note">
+      Findings indicate activity that may deserve investigation. They do <strong>not</strong> prove that a
+      system has been compromised. Every finding explains why it matters, what could legitimately explain it,
+      and what to check next.
+    </p>
+
+    <div class="card">
+      <h3 class="card-title">Investigation priority score</h3>
+      <p class="score-total" id="score-total"></p>
+      <ul class="score-ledger" id="score-ledger"></ul>
+      <p class="field-help">
+        This is an educational prioritisation mechanism that shows exactly what contributed to the score.
+        It is <strong>not</strong> a mathematical probability of compromise.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Dashboard</h3>
+      <ul class="stat-grid" id="stat-grid"></ul>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Findings requiring investigation</h3>
+      <div id="findings-list" class="findings-list"></div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Timeline of noteworthy activity</h3>
+      <ol class="timeline" id="timeline-list"></ol>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Event overview</h3>
+      <div class="table-pair">
+        <div>
+          <h4 class="sub-title">Top accounts by event count</h4>
+          <div class="table-scroll" id="tbl-top-accounts"></div>
+        </div>
+        <div>
+          <h4 class="sub-title">Top accounts with failed logins</h4>
+          <div class="table-scroll" id="tbl-top-failed"></div>
+        </div>
+      </div>
+      <div class="table-single">
+        <h4 class="sub-title">Most common Event IDs</h4>
+        <div class="table-scroll" id="tbl-common-ids"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Administrative / Privilege Activity</h3>
+      <p class="field-help">
+        Account creation, privilege changes, deleted accounts, service installations and audit-log clearing
+        seen in this dataset, summarised together. Related events are grouped only when the account matches
+        &mdash; unrelated users are listed separately rather than blended into one accusation.
+      </p>
+      <div id="admin-activity"></div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Filter and search parsed events</h3>
+      <p class="field-help">
+        Filters apply to the parsed event table below. Every filter has a visible label so it can be used
+        with a keyboard or screen reader.
+      </p>
+      <div class="filter-grid">
+        <div class="form-row">
+          <label class="field-label" for="filter-eventid">Event ID</label>
+          <select id="filter-eventid"><option value="">All Event IDs</option></select>
+        </div>
+        <div class="form-row">
+          <label class="field-label" for="filter-account">Account</label>
+          <select id="filter-account"><option value="">All accounts</option></select>
+        </div>
+        <div class="form-row">
+          <label class="field-label" for="filter-severity">Severity</label>
+          <select id="filter-severity"><option value="">All severities</option></select>
+        </div>
+        <div class="form-row">
+          <label class="field-label" for="filter-ip">Source IP</label>
+          <select id="filter-ip"><option value="">All source IPs</option></select>
+        </div>
+        <div class="form-row">
+          <label class="field-label" for="filter-type">Event type</label>
+          <select id="filter-type"><option value="">All event types</option></select>
+        </div>
+        <div class="form-row">
+          <label class="field-label" for="filter-search">Search text</label>
+          <input type="search" id="filter-search" placeholder="e.g. jsmith, 4625, cmd.exe"
+                 aria-describedby="filter-search-help">
+          <p class="field-help" id="filter-search-help">
+            Searches every visible column, including the raw event message.
+          </p>
+        </div>
+      </div>
+      <div class="form-row form-row-inline">
+        <button type="button" class="btn btn-secondary" id="btn-clear-filters">Clear filters</button>
+        <p class="field-help" id="events-count" role="status" aria-live="polite"></p>
+      </div>
+      <div class="table-scroll">
+        <table id="events-table" class="events-table">
+          <caption class="field-help">
+            Parsed events from your uploaded file. Severity shows investigative priority, not certainty of
+            compromise.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Severity</th>
+              <th scope="col">Event ID</th>
+              <th scope="col">Date and time</th>
+              <th scope="col">Account</th>
+              <th scope="col">Type</th>
+              <th scope="col">Source IP</th>
+              <th scope="col">Computer</th>
+              <th scope="col">Key detail</th>
+            </tr>
+          </thead>
+          <tbody id="events-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 4. EDUCATION ============================ -->
+  <section id="education" class="panel" aria-labelledby="education-heading">
+    <h2 id="education-heading" class="panel-title">4. Learn: how to think like a SOC analyst</h2>
+
+    <div class="card">
+      <h3 class="card-title">A repeatable triage workflow</h3>
+      <ol class="workflow">
+        <li><strong>Identify the event.</strong> What Event ID is it, and which log did it come from?</li>
+        <li><strong>Understand what happened.</strong> Read the message and work out what Windows is telling you.</li>
+        <li><strong>Identify the affected user or system.</strong> Who or what was involved?</li>
+        <li><strong>Determine whether the activity is expected.</strong> Does it fit this host, this account,
+            and this time of day?</li>
+        <li><strong>Look for related events.</strong> What happened immediately before and after it?</li>
+        <li><strong>Correlate authentication and privilege activity.</strong> Failures, successes and
+            permission changes often only make sense together.</li>
+        <li><strong>Gather additional evidence.</strong> Other logs, MFA records, endpoint telemetry, change
+            tickets, and the person who owns the account.</li>
+        <li><strong>Decide whether escalation is required.</strong> If you cannot explain the activity, pass it
+            on with the evidence you have collected.</li>
+      </ol>
+      <blockquote class="callout">
+        One security event rarely tells the entire story. Analysts build context by correlating multiple events.
+      </blockquote>
+      <blockquote class="callout callout-alt">
+        A detection is a reason to investigate, not proof that an attacker is present.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Detection, correlation and false positives</h3>
+      <p>
+        A <strong>detection</strong> is a rule that says "this pattern is worth a look". A
+        <strong>correlation</strong> combines several events into a story, which is usually far more
+        informative than any single event.
+      </p>
+      <p>
+        A <strong>false positive</strong> is a detection that fires on legitimate activity. They are normal and
+        expected. A forgotten password produces repeated failures. A helpdesk technician legitimately adds a
+        user to a privileged group. A backup product clears logs during maintenance. The skill in triage is not
+        avoiding false positives entirely &mdash; it is being able to explain what you checked and why you were
+        satisfied, or why you escalated.
+      </p>
+      <p class="field-help">
+        This tool deliberately explains possible benign causes for every finding. That is what a real analyst
+        does before escalating.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Windows Event ID reference for beginners</h3>
+      <p class="field-help">
+        A deliberately short list. Learning ten Event IDs well is more useful than skimming a thousand.
+      </p>
+      <div id="eventid-reference" class="reference"></div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">How to collect Windows events with Event Viewer</h3>
+      <ol class="workflow">
+        <li>Press <kbd>Win</kbd> + <kbd>R</kbd>, type <code>eventvwr.msc</code> and press Enter.</li>
+        <li>In the left pane, expand <em>Windows Logs</em> and click <em>Security</em>.</li>
+        <li>Optionally click <em>Filter Current Log&hellip;</em> and enter the Event IDs you want
+            (for example <code>4624,4625,4720,4732,1102</code>).</li>
+        <li>With the log or filter selected, choose <em>Action &rarr; Save All Events As&hellip;</em> and set
+            <em>Save as type</em> to <strong>CSV</strong>.</li>
+        <li>Open this tool and upload that CSV file.</li>
+      </ol>
+      <p class="field-help">
+        <strong>Honest note:</strong> Event Viewer's own CSV export has real limitations. It can be slow on
+        large log sets, its column headers are translated on non-English Windows installations, and the useful
+        detail (account, logon type, source IP) is embedded inside a multi-line "Message" column rather than in
+        separate columns. For Event ID 4104 (PowerShell) you must export the
+        <em>Applications and Services Logs &rarr; Microsoft &rarr; Windows &rarr; PowerShell &rarr;
+        Operational</em> log, and for 7045 the <em>System</em> log; Event Viewer's Save dialog exports one log
+        at a time. See the README for a PowerShell export command that produces all of these in one consistent
+        file, which is the more reliable route.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================ 5. DISCLAIMER ============================ -->
+  <section id="disclaimer" class="panel" aria-labelledby="disclaimer-heading">
+    <h2 id="disclaimer-heading" class="panel-title">5. Privacy, disclaimer and limitations</h2>
+
+    <div class="card">
+      <h3 class="card-title">Privacy architecture</h3>
+      <p>
+        Your Windows security logs are analysed locally in your browser. Files are not uploaded or transmitted
+        anywhere.
+      </p>
+      <ul class="bullet">
+        <li>There is no server, no backend, no database and no cloud service.</li>
+        <li>The application makes <strong>zero network requests</strong>. It contains no analytics, tracking,
+            cookies, advertising or telemetry.</li>
+        <li>Uploaded files are read into memory only. They are not stored, not written to disk, and not
+            retained after you close the tab.</li>
+        <li>Nothing is sent to any AI provider or external API, because no such code exists in this project.</li>
+        <li>You can verify this: open <code>script.js</code> and search for <code>fetch</code>,
+            <code>XMLHttpRequest</code>, <code>sendBeacon</code> and <code>WebSocket</code>. They appear only
+            inside comments explaining why they are not used.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Disclaimer</h3>
+      <p class="disclaimer-text">
+        Educational SOC triage tool. Findings indicate activity that may deserve investigation and do not prove
+        malicious behaviour.
+      </p>
+      <p class="disclaimer-text">
+        Only analyse logs from systems you own or are authorised to investigate.
+      </p>
+      <p class="field-help">
+        Severity in this tool describes <em>investigative priority</em>, not certainty. The word "Critical" is
+        deliberately not used.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">Known limitations</h3>
+      <ul class="bullet" id="limitations-list"></ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>
+      Windows Security Event Log Triage Tool &mdash; an educational project. Runs entirely offline in your
+      browser. No data leaves this page.
+    </p>
+    <p class="field-help" id="build-info"></p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+  <!-- ============================ 2. SETTINGS ============================ -->
+  <section id="settings" class="panel" aria-labelledby="settings-heading">
+    <h2 id="settings-heading" class="panel-title">2. Thresholds</h2>
+
+    <p class="lede">
+      Security thresholds vary by environment. These values are <strong>educational defaults</strong>
+      rather than universal SOC detection rules.
+    </p>
+
+    <div class="settings-grid">
+      <div class="form-row">
+        <label class="field-label" for="setting-threshold">Failed login threshold</label>
+        <input type="number" id="setting-threshold" min="2" max="1000" step="1" value="5"
+               aria-describedby="threshold-help">
+        <p class="field-help" id="threshold-help">
+          Number of failed logons (Event ID 4625) for the <em>same account</em> before an alert is raised.
+          Default: 5.
+        </p>
+      </div>
+
+      <div class="form-row">
+        <label class="field-label" for="setting-window">Failed login time window (minutes)</label>
+        <input type="number" id="setting-window" min="1" max="10080" step="1" value="10"
+               aria-describedby="window-help">
+        <p class="field-help" id="window-help">
+          Failures must fall inside this window to be treated as a single burst. Default: 10 minutes.
+          If your export has no usable timestamps, the tool falls back to whole-dataset grouping and says so.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-row form-row-inline">
+      <button type="button" class="btn btn-secondary" id="btn-reset-defaults">Reset Defaults</button>
+      <span class="field-help" id="settings-note" role="status" aria-live="polite"></span>
+    </div>
+  </section>
